@@ -157,7 +157,7 @@ function closestValue(arr, target) {
     }
   }
 
-  return arr[mid]; //arbitrary value
+  return -1;
 }
 
 
@@ -214,7 +214,37 @@ function squareRoot(n) {
  */
 
 function greaterValues(arr, target) {
-  // YOUR WORK HERE
+  let end = arr.length - 1;
+  let start = 0;
+  let mid = Math.floor((start + end) / 2);
+
+  if (target < arr[start]) {
+    return arr.length;
+  }
+  else if (target > arr[end]) {
+    return 0;
+  }
+
+  while (start != end) {
+    mid = Math.floor((start + end) / 2);
+    console.log("START IS " + start);
+    console.log("MID IS " + mid);
+    console.log("END IS " + end);
+
+    if (target == arr[mid]) {
+      console.log(arr.length - mid);
+      return (arr.length - 1) - mid;
+    }
+
+    if (target < mid) {
+      end = mid;
+    }
+
+    else if (target > mid) {
+      start = mid;
+    }
+  }
+  return -1;
 }
 
 
