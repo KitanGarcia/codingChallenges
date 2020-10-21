@@ -85,7 +85,16 @@ function printReverse(arr) {
  * Example: reverseString('hello') => 'olleh'
  */
 function reverseString(str){
-  // YOUR WORK HERE
+  let returnString = "";
+  function reverseString(i) {
+    if (i < str.length) {
+      returnString = returnString + str[(str.length - 1) - i];
+      reverseString(i + 1);
+    }
+  }
+  reverseString(0);
+  console.log(returnString);
+  return returnString;
 }
 
 
