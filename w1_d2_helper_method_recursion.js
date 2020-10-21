@@ -108,9 +108,17 @@ function reverseString(str){
  * Example: arrayPairs([1, 2, 3, 4, 5])     =>    [[1,2], [3,4], [5, undefined]]
  */
  function arrayPairs(arr) {
-   // YOUR WORK HERE
+   let returnArr = [];
+   function pairArrays(i) {
+     if (i < arr.length) {
+       returnArr.push([arr[i], arr[i + 1]]);
+       pairArrays(i + 2);
+     }
+   }
+   pairArrays(0);
+   console.log(returnArr);
+   return returnArr;
  }
-
 
 /*
  * 2e. Flatten a nested array
