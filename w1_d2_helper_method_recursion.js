@@ -144,9 +144,17 @@ function flatten(arr){
  * 1 --> 3 --> 9 --> 27 --> 81
  */
 function power(base, exponent) {
-  // YOUR WORK HERE
+  let result = 1;
+  function computePower(i) {
+    if (i <= exponent) {
+      result = result * base;
+      computePower(i + 1);
+    }
+  }
+  computePower(1);
+  console.log(result);
+  return result;
 }
-
 
 /*
  * 2g. Merge two sorted arrays
