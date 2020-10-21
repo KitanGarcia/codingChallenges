@@ -63,7 +63,16 @@ function printArray(arr){
  *          1
  */
 function printReverse(arr) {
-  // YOUR WORK HERE
+  let returnArr = [];
+  function reverseLogElement(i) {
+    if (i >= 0) {
+      returnArr.push(arr[i]);
+      reverseLogElement(i - 1);
+    }
+  }
+  reverseLogElement(arr.length - 1);
+  console.log(returnArr);
+  return returnArr;
 }
 
 
