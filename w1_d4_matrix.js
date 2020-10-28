@@ -334,9 +334,44 @@ class Matrix {
     return result;
   }
 
+  /*
+ *            slice:   returns a new Matrix representing a subset of the original matrix
+ *                     it's rows are bounded by the first two-element array input
+ *                     it's columns are bounded by the second two-element array input
+ *
+ *                     NOTE: If the rowRange or colRange is larger than the original matrix
+ *                           just return the bounds of the original matrix
+ *
+ *                     NOTE: Think about how much you'll have to offset insertions into the new matrix
+ *
+ *                    Input:      rowRange {Array of Two Integers}
+ *                    Input:      colRange {Array of Two Integers}
+ *                   Output:     {Matrix}
+ *
+ *                 Example:
+ *
+ *                 matrix.storage == [[0, 1, 2],
+ *                                    [3, 4, 5],
+ *                                    [6, 7, 8]]
+ *
+ *                 matrix.slice([0, 2], [0, 2])
+ *
+ *                 result == [[0, 1],
+ *                            [3, 4]]
+   */
   slice(rowRange, colRange) {
-    //YOUR WORK HERE
-    return null;
+    if (rowRange > this.m || colRange > this.n) {
+      return this.storage;
+    }
+
+    let result = [];
+    for (let i = rowRange[0]; i < rowRange[1]; i++) {
+      result.push([]);
+      for (let j = colRange[0]; j < colRange[1]; j++) {
+        result[i][j] = this.storage[i][j];
+      }
+    }
+    return result;
   }
 
   transpose() {
