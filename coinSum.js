@@ -53,3 +53,36 @@ function coinSum(coins, total) {
       addCoin(total - )
     }
 }
+
+//order doesn't matter. Watch out for equivalent answer 5 + 3 + 2 is the same as 2 + 5 + 3
+//table = [];
+//prefilled table to length of target + 1
+//filled with 0s, but have table[0] = 1
+//for each target, store the number of unique unordered combos
+//
+//iterate through coins
+//  loop i, from coin to target 
+//  table[i] = table[i] + table[i - coin]
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//  function coinSum(coins, total) {
+//    let table = new Array(total + 1);
+//    table.fill(0);
+//    table[0] = 1;
+//
+//    coins.forEach(coin => {
+//      for (let i = coin; i < table.length; i++) {
+//        table[i] = table[i] + table[i - coin];
+//      }
+//    });
+//
+//    return table[return.length - 1]
+//  }
+//https://repl.it/@DaliaOutco/CoinSum

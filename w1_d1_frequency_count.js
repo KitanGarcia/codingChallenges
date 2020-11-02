@@ -123,6 +123,28 @@ function wordCount(sentence) {
 
 function rgb(string) {
   // YOUR WORK HERE
+  let hash = {r: 0, g: 0, b: 0};
+
+  for (let i = 0; i < string.length; i++) {
+    if (string[i] === "r") {
+      hash["r"]++;
+    }
+    if (string[i] === "g") {
+      hash["g"]++;
+    }
+    if (string[i] === "b") {
+      hash["b"]++;
+    }
+  }
+
+  //find minimum
+  let min = hash["r"];
+  for (let letter in hash) {
+    if (hash[letter] < min) {
+      min = hash[letter];
+    }
+  }
+  return min;
 }
 
 
