@@ -168,6 +168,20 @@ function rgb(string) {
  * `4, [1, 4, 2] --> [3]`
  * `8, [4, 7, 1, 6] --> [2, 3, 5, 8]`
  * `6, [6, 4, 2, 1] --> [3, 5]`
+ *
+ * hash table
+ * result = []
+ * for each from 1 to n
+ *   if hash1[key] hash1[key - 1] {
+ *     hash2[key] = hash[key] - hash[key - 1]
+ *   }
+ * }
+ * for each key in hash2 {
+ *   for (let i = 0; i < hash2[key]) {
+ *     result.push(hash2[key] + i + 1)
+ *   }
+ * }
+ * return result
  */
 
 function missingNumber(n, arr) {
@@ -309,15 +323,30 @@ function letterSort(string) {
  * 8970 --> 789
  * 32445 --> 23445
  * 10101 --> 111
+ *
+ * store all digits in hash table (worst case would be O(10) space or O(1)
  */
 
 
 function sortDigits(n) {
-  let lastDigit = n % 10;
-  let remaining = (n - lastDigit) / 10;
-  console.log(lastDigit);
-  console.log(remaining);
+  let hash = {0: 0, 1:0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0};
+  let digit;
+  let newNum = n;
+  let result = "";
 
+  while (newNum != 0) {
+    digit = newNum % 10;
+    newNum = Math.floor(newNum / 10);
+    hash[digit]++;
+  }
+
+  for (let digit in hash) {
+    if (digit != 0 && hash[digit] != 0) {
+      result += digit.toString().repeat(hash[digit]);
+    }
+  }
+  console.log(result);
+  return parseInt(result);
 }
 
 
