@@ -45,8 +45,23 @@
 
 // Time Complexity:
 // Auxiliary Space Complexity:
+/*
+ * 1. Iterate from arr[1] to arr[n] over the array where n is size of array
+ * 2. Compare current element to its predecessor
+ * 3. If curr < predecessor, compare to the elements before. Move the greater elements one position up to make space for the swapped element
+ */
 function insertionSort(input) {
-  // YOUR WORK HERE
+  for (let i = 1; i < input.length; i++) {
+    let j = i - 1;
+    let key = input[i];
+
+    while (j >= 0 && input[j] > key) {
+      input[j + 1] = input[j];
+      j = j - 1;
+    }
+    input[j + 1] = key;
+  }
+  return input;
 }
 
 // Time Complexity:
