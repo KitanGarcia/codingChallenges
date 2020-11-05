@@ -184,30 +184,61 @@ function rgb(string) {
  * return result
  */
 
+/*function missingNumber(num, arr) {
+  let newSet = new Set();
+  for(let i = 1; i < num; i++) {
+    newSet.add(i)
+  }
+ for(let key of arr) {
+   if(newSet.has(key))
+   newSet.delete(key)
+ }
+ return [...newSet]
+}
+*/
+  
 function missingNumber(n, arr) {
-  let missingNumbers = [];
+  let result = [];
+  let hash1 = {};
+  let nInside = false;
 
-  let sortedArray = arr.sort();
-  console.log(sortedArray);
+  //this probably takes O(nlog(n))
+  arr = arr.sort();
+  let lastNum = arr[arr.length - 1];
 
-  let missingNumHash = {};
-
-  //store missing ones in hash table?
-  //find way to get difference added. need another loop
-
-
-  for (let i = 0; i < sortedArray.length - 1; i++) {
-    let difference = sortedArray[i + 1] - sortedArray[i];
-    console.log(difference);
-    if (difference > 1) {
-      missingNumHash[sortedArray[i]] = difference - 1;
+  //add each element to hash table if there is a number missing
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] + 1 < arr[i + 1]) {
+      hash1[arr[i]] = arr[i + 1] - arr[i];
+    }
+    if (arr[i] === n) {
+      nInside = true;
     }
   }
 
-  console.log(missingNumHash);
-  for (let number in missingNumHash) {
-     console.log(missingNumHash[number]);
+
+  //push hash value + 1 according to each count in the hash
+  for (let number in hash1) {
+    let gap = hash1[number] - 1;
+    let count = 1;
+    while (count <= gap) {
+      result.push(parseInt(number) + count);
+      count++;
+    }
   }
+
+  //if the number is larger than the max of the array
+  if (nInside === false) {
+    let gap = n - lastNum;
+    let count = 1;
+    while (count <= gap) {
+      result.push(lastNum + count);
+      count++;
+    }
+  }
+  console.log(result);
+  return result;
+  
 }
 
 
