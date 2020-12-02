@@ -28,25 +28,11 @@
 'use strict';
 
 function unique(arr) {
-  let numOccurrences = {}; //key is value of array; value is number of occurrences
-  let uniqueVals = [];
-
-  for (let i = 0; i < arr.length; i++) {
-    if (numOccurrences.hasOwnProperty(arr[i])) {
-      numOccurrences[arr[i]]++;
-    }
-    else {
-      numOccurrences[arr[i]] = 1;
-    }
-  }
- 
-  console.log(numOccurrences);
-  for (let key in numOccurrences) {
-    uniqueVals.push(parseInt(key)); 
-  }
-  
-  console.log(uniqueVals);
-  return uniqueVals;
+  let set = new Set();
+  arr.forEach((element) => {
+    set.add(element);
+  });
+  return Array.from(set);
 }
 
 
@@ -76,27 +62,24 @@ function unique(arr) {
  */
 
 function wordCount(sentence) {
-  let hashTable = {};
-
-  if (sentence) {
-    let noPunctuation = sentence.replace(/[^\w\s]/g, ""); //removes anything that's not a digit, letter, whitespace, or _
-    let noCaps = noPunctuation.replace(/[A-Z]/g, l => l.toLowerCase());//replace caps with lowercase
-    console.log(noCaps);
-
-    let words = noCaps.split(" ");
-    console.log(words);
-
-    for (let i = 0; i < words.length; i++) {
-      if (hashTable.hasOwnProperty(words[i])) {
-        hashTable[words[i]]++;
-      }
-      else {
-        hashTable[words[i]] = 1;
-      }
-    }
+  if (sentence.length === 0) {
+    return {};
   }
-  console.log(hashTable);
-  return hashTable;
+
+  let noPunctuation = sentence.replace(/[^\w\s]/g, ""); //removes anything that's not a digit, letter, whitespace
+  let noCaps = noPunctuation.replace(/[A-Z]/g, l => l.toLowerCase());//replace caps with lowercase
+  let words = noCaps.split(" ");
+
+  let hash = {};
+  words.forEach((word) => {
+    if (hash.hasOwnProperty(word)) {
+      hash[word]++;
+    }
+    else {
+      hash[word] = 1;
+    }
+  });
+  return hash;
 }
 
 
@@ -122,29 +105,22 @@ function wordCount(sentence) {
  */
 
 function rgb(string) {
-  // YOUR WORK HERE
-  let hash = {r: 0, g: 0, b: 0};
-
+  //get min of r, g, and b. That is the answer
+  let r = 0;
+  let b = 0;
+  let g = 0;
   for (let i = 0; i < string.length; i++) {
     if (string[i] === "r") {
-      hash["r"]++;
+      r++;
     }
-    if (string[i] === "g") {
-      hash["g"]++;
+    else if (string[i] === "b") {
+      b++;
     }
-    if (string[i] === "b") {
-      hash["b"]++;
-    }
-  }
-
-  //find minimum
-  let min = hash["r"];
-  for (let letter in hash) {
-    if (hash[letter] < min) {
-      min = hash[letter];
+    else if (string[i] === "g") {
+      g++;
     }
   }
-  return min;
+  return Math.min(r, g, b);
 }
 
 
@@ -169,76 +145,19 @@ function rgb(string) {
  * `8, [4, 7, 1, 6] --> [2, 3, 5, 8]`
  * `6, [6, 4, 2, 1] --> [3, 5]`
  *
- * hash table
- * result = []
- * for each from 1 to n
- *   if hash1[key] hash1[key - 1] {
- *     hash2[key] = hash[key] - hash[key - 1]
- *   }
- * }
- * for each key in hash2 {
- *   for (let i = 0; i < hash2[key]) {
- *     result.push(hash2[key] + i + 1)
- *   }
- * }
- * return result
  */
-
-/*function missingNumber(num, arr) {
-  let newSet = new Set();
-  for(let i = 1; i < num; i++) {
-    newSet.add(i)
-  }
- for(let key of arr) {
-   if(newSet.has(key))
-   newSet.delete(key)
- }
- return [...newSet]
-}
-*/
-  
 function missingNumber(n, arr) {
+  let set = new Set();
   let result = [];
-  let hash1 = {};
-  let nInside = false;
 
-  //this probably takes O(nlog(n))
-  arr = arr.sort();
-  let lastNum = arr[arr.length - 1];
+  arr.forEach(element => set.add(element));
 
-  //add each element to hash table if there is a number missing
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i] + 1 < arr[i + 1]) {
-      hash1[arr[i]] = arr[i + 1] - arr[i];
-    }
-    if (arr[i] === n) {
-      nInside = true;
+  for (let i = 1; i <= n; i++) {
+    if (!set.has(i)) {
+      result.push(i);
     }
   }
-
-
-  //push hash value + 1 according to each count in the hash
-  for (let number in hash1) {
-    let gap = hash1[number] - 1;
-    let count = 1;
-    while (count <= gap) {
-      result.push(parseInt(number) + count);
-      count++;
-    }
-  }
-
-  //if the number is larger than the max of the array
-  if (nInside === false) {
-    let gap = n - lastNum;
-    let count = 1;
-    while (count <= gap) {
-      result.push(lastNum + count);
-      count++;
-    }
-  }
-  console.log(result);
   return result;
-  
 }
 
 
@@ -263,11 +182,54 @@ function missingNumber(n, arr) {
  */
 
 function letterSort(string) {
-  /*
-   * Easy solution
-   */
-  let array = string.split('');
-  return array.sort().join('');
+
+  // First write the swap function, which is just a helper function to swap values of the array.
+  function swap(array, leftIndex, rightIndex) {
+    [ array[leftIndex], array[rightIndex] ] = [ array[rightIndex], array[leftIndex] ];
+  }
+
+  function quicksort(array, left, right) {
+    left = left || 0;
+    right = right || array.length - 1;
+
+    let pivot = partition(array, left, right);
+    if (left < pivot - 1) {
+      quicksort(array, left, pivot - 1); //perform quicksort with pivot - 1 as the new right
+    }
+    if (right > pivot) {
+      quicksort(array, pivot, right); //perform quicksort pivot as the new left
+    }
+    return array;
+  }
+
+
+  /* Two indices that start at the ends of the array being partitioned, then move toward each other, until they detect an inversion: a pair of elements, one greater than the pivot, one smaller, that are in the wrong order relative to each other. The inverted elements are then swapped. 
+Here the numerical values of left and right are continually getting updated with each inner while loop. But only if the while loop condition gets satisfied. That is, when the while loop condition is unsatisfied, e.g. for the first inner while loop, when array[left] > array[pivot] which means we have found a misplaced pair. 
+That is, although the left <= right (which is being made sure by the outer while loop) the actual elements are not sorted. Meaning a left side element is larger in value than the right side element. So, the code execution then jumps out of the inner while loop and goes right in to execute the swap function.
+*/
+  function partition(array, left, right) {
+    var pivot = Math.floor((left + right) / 2);
+
+    while (left < right) {
+      while (array[left] < array[pivot]) {
+        left++
+      }
+      while (array[right] > array[pivot]) {
+        right--
+      }
+
+      if (left <= right) {
+        swap(array, left, right);
+        left++
+        right--
+      }
+    }
+    return left;
+  }
+
+  let letters = string.split("");
+  let sortedArray = quicksort(letters, 0, letters.length - 1);
+  return sortedArray.join("");
 }
 
 
@@ -298,38 +260,35 @@ function letterSort(string) {
  */
 
  function characterMode(string) {
-   let characterHash = {};
-   let finalString = string.replace(/[ ]/g, ""); //removes whitespace
-   finalString = finalString.replace(/[A-Z]/g, l => l.toLowerCase()); //replaces caps with lowercase
+   let hash = {};
 
-
-   for (let i = 0; i < finalString.length; i++) {
-     if (characterHash[finalString[i]]) {
-       characterHash[finalString[i]]++;
-     }
-     else {
-       characterHash[finalString[i]] = 1;
+   //need to make everything lowercase
+   for (let i = 0; i < string.length; i++) {
+     if (string[i] !== ' ') {
+       if (!hash.hasOwnProperty(string[i])) {
+         hash[string[i].toLowerCase()] = 1;
+       }
+       else {
+         hash[string[i].toLowerCase()]++;
+       }
      }
    }
-   console.log(characterHash);
-
-   let returnString = "";
 
    let max = 0;
-   for (let letter in characterHash) {
-     let tempMax = characterHash[letter];
-     if (tempMax > max) {
-       max = tempMax;
+   let maxLetter = '';
+   //find max count
+   for (let letter in hash) {
+     if (max < hash[letter]) {
+       max = hash[letter];
      }
    }
-   console.log(max);
-
-   for (let letter in characterHash) {
-     if (characterHash[letter] == max) {
-       returnString = returnString + letter;
+   //get all letters with max count
+   for (let letter in hash) {
+     if (hash[letter] === max) {
+       maxLetter += letter;
      }
    }
-   return returnString;
+   return maxLetter;
  }
 
 
@@ -360,24 +319,26 @@ function letterSort(string) {
 
 
 function sortDigits(n) {
-  let hash = {0: 0, 1:0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0};
+  let hash = {};
+  let current = n;
   let digit;
-  let newNum = n;
-  let result = "";
-
-  while (newNum != 0) {
-    digit = newNum % 10;
-    newNum = Math.floor(newNum / 10);
-    hash[digit]++;
-  }
-
-  for (let digit in hash) {
-    if (digit != 0 && hash[digit] != 0) {
-      result += digit.toString().repeat(hash[digit]);
+  let string = "";
+  while (current > 0) {
+    digit = current % 10;
+    current = Math.floor(current / 10);
+    if (digit !== 0) {
+      if (hash[digit]) {
+        hash[digit]++;
+      }
+      else {
+        hash[digit] = 1;
+      }
     }
   }
-  console.log(result);
-  return parseInt(result);
+  for (const [key, value] of Object.entries(hash)) {
+    string += key.repeat(value);
+  }
+  return parseInt(string);
 }
 
 
@@ -404,27 +365,22 @@ function sortDigits(n) {
 
 function getDuplicates(arr) {
   let hash = {};
-  let finalArray = [];
-
-  for (let i = 0; i < arr.length; i++) {
-    if (hash[arr[i]]) {
-      hash[arr[i]]++;
+  arr.forEach((element) => {
+    if (hash.hasOwnProperty(element)) {
+      hash[element]++;
     }
     else {
-      hash[arr[i]] = 1;
+      hash[element] = 1;
+    }
+  });
+
+  let returnArray = [];
+  for (const key in hash) {
+    if (hash[key] > 1) {
+      returnArray.push(parseInt(key));
     }
   }
-
-  console.log(hash);
-
-  for (let key in hash) {
-    if (hash[key] > 1)
-    {
-      finalArray.push(parseInt(key));
-    }
-  }
-  console.log(finalArray);
-  return finalArray;
+  return returnArray;
 }
 
 
@@ -454,35 +410,33 @@ function getDuplicates(arr) {
  */
 
 function anagramPair(string1, string2) {
-  let string1Hash = {};
-  let string2Hash = {};
+  let hash1 = {};
+  let hash2 = {};
 
-  if (string1.length != string2.length) {
+  if (string1.length !== string2.length) {
     return false;
   }
 
   for (let i = 0; i < string1.length; i++) {
-    if(string1Hash[string1[i]]) {
-      string1Hash[string1[i]]++;
+    if (hash1.hasOwnProperty(string1[i])) {
+      hash1[string1[i]]++;
     }
     else {
-      string1Hash[string1[i]] = 1
+      hash1[string1[i]] = 1;
     }
   }
 
   for (let i = 0; i < string2.length; i++) {
-    if(string2Hash[string2[i]]) {
-      string2Hash[string2[i]]++;
+    if (hash2.hasOwnProperty(string2[i])) {
+      hash2[string2[i]]++;
     }
     else {
-      string2Hash[string2[i]] = 1
+      hash2[string2[i]] = 1;
     }
   }
-  console.log(string1Hash);
-  console.log(string2Hash);
 
-  for (let letter in string1Hash) {
-    if (string1Hash[letter] != string2Hash[letter]) {
+  for (let key in hash1) {
+    if (hash1[key] !== hash2[key]) {
       return false;
     }
   }
@@ -519,31 +473,24 @@ function anagramPair(string1, string2) {
 
 
  function anagramPalindrome(string) {
-   // YOUR WORK HERE
-   // what makes a palindrome? Either all the letters are even in count, or all but one are
-   let letterHash = {};
+   //palindromes can be formed when the letters have even counts or all but one do
+   let hash = {};
    for (let i = 0; i < string.length; i++) {
-     if (letterHash[string[i]]) {
-       letterHash[string[i]]++;
+     if (hash.hasOwnProperty(string[i])) {
+       hash[string[i]]++;
      }
      else {
-       letterHash[string[i]] = 1;
+       hash[string[i]] = 1;
      }
    }
-   
+
    let oddCount = 0;
-   for (let letter in letterHash) {
-     if (letterHash[letter] % 2 == 1) {
+   for (let key in hash) {
+     if (hash[key] % 2 > 0) {
        oddCount++;
      }
    }
-   return (oddCount > 1 ? false: true);
-   /*
-   if (oddCount > 1) {
-     return false;
-   }
-   return true;
-   */
+   return oddCount > 1 ? false : true;
  }
 
 
