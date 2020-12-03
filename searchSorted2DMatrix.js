@@ -1,18 +1,4 @@
-/*How do you define strong leadership?
-Should take one minute; minute and a half at most
-
-Prompt
-Say: "How do you define strong leadership"
-
-Do you hear these things?
-Identify: Does the interviewee discuss their competencies based on what you have asked them? Competencies include:
-
-Technical Skills (libraries, languages, etc.)
-Interpersonal Skills
-Prove: Does the interviewee provide a specific example (past experience or hypothetical scenario) to showcase competencies and/or fit? Is it presented in the form of a story (punchline, beginning, middle, positive end)?
-
-Close: Does the interviewee showcase why the company should hire them and how their skills/experience/values will add value to and align with the team/company? Does the interviewee showcase what they have learned in "Prove" and how they will apply it to the new role?
-
+/*
 215 - Search a 2D matrix
 Write an efficient algorithm that searches for a value in an M x N matrix. This matrix has the following properties:
 
@@ -35,19 +21,77 @@ output: true
 Constraints:
 Time Complexity: O(log (N*M)) with M being the number of rows and N being the number of columns.   
 Auxiliary Space Complexity: O(1)
+
+
+
+  [1,   3,  5,  7],
+  [10, 11, 16, 20],
+  [23, 30, 34, 50]
+
+  binary search.
+  If target >= start and mid <= target, look in that array
+  binary search to find target within sub array
  */
 
 
+//nested binary searches yield O(log(n)) * O(log(m))
+//this solution does not satisfy the time complexity
+function search2DMatrix(matrix, target) {
+  //time and space constraints tell us that binary search should be used. log(n) * log(m)
+  let start = 0;
+  let end = matrix.length - 1;
+  let mid;
+
+  //check that input is a matrix
+  if (!Array.isArray(matrix) || !Array.isArray(matrix[0])) {
+    return false;
+  }
+
+  //binary search outer matrix
+  while(start <= end) {
+    mid = Math.floor((start + end) / 2);
+    let dest = matrix[mid + 1] || matrix[matrix.length - 1]; //to avoid undefined error
+    if(matrix[mid][0] === target) {
+      return mid;
+    }
+
+    else if ((matrix[mid][0] < target && dest[0] > target) || (mid === matrix.length - 1 && matrix[mid][0] < target)) {
+      //binary search nested matrixs
+      let start2 = 0;
+      let end2 = matrix[mid].length - 1;
+      let mid2;
+      while (start2 <= end2) {
+        mid2 = Math.floor((start2 + end2) / 2);
+        if (matrix[mid][mid2] === target) {
+          return mid2;
+        }
+        else if (matrix[mid][mid2] < target) {
+          start2 = mid2 + 1;
+        }
+        else if (matrix[mid][mid2] > target) {
+          end2 = mid2 - 1;
+        }
+      }
+      return false; //or break
+    }
 
 
+    else if(target < matrix[mid][0]) {
+      end = mid - 1;
+    }
+    else {
+      start = mid + 1;
+    }
+  }
+  return false;
+}
+
+console.log(search2DMatrix([[1, 3, 4, 5, 7], [10, 11, 12, 16, 20], [23, 24, 30, 34, 50]], 34));
 
 
-
-
-
-
+//given python solution
 /*
-def search_matrix(matrix, target):
+ * def search_matrix(matrix, target):
 
   if not matrix: return False
 
@@ -67,4 +111,4 @@ def search_matrix(matrix, target):
       back = midpoint - 1
 
   return False
- * /
+  */
