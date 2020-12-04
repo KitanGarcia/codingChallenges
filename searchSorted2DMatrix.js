@@ -89,26 +89,47 @@ function search2DMatrix(matrix, target) {
 console.log(search2DMatrix([[1, 3, 4, 5, 7], [10, 11, 12, 16, 20], [23, 24, 30, 34, 50]], 34));
 
 
-//given python solution
+
+
+
 /*
- * def search_matrix(matrix, target):
+ * [[1, 3, 5, 7],
+ *  [10, 11, 16, 20],
+ *  [23, 30, 34, 50]]
+ *
+ *  Is visualized as
+ *  [1, 3, 5, 7, 10, 11, 16, 20, 23, 30, 34, 50]
+ *  11 is matrix[5] which is really matrix[1][2]
+ *  To get these indices, the row is 5 / cols and column is 5 % cols
+ */
+//think of the 2D array as a 1D array
+function search2DMatrix2(matrix, target) {
+  //check that input is a matrix
+  if (!Array.isArray(matrix) || !Array.isArray(matrix[0]) || matrix.length === 0) {
+    return false;
+  }
 
-  if not matrix: return False
+  let rows = matrix.length;
+  let cols = matrix[0].length;
 
-  num_of_rows, num_of_cols = len(matrix), len(matrix[0])
+  let start = 0;
+  let end = rows * cols - 1; //not the length of the first sub array, but the total length if treated as 1D array
 
-  front, back = 0, (num_of_rows)*(num_of_cols) - 1
 
-  while front <= back:
-    midpoint = front + ((back - front) // 2)
-    number = matrix[midpoint // num_of_cols][midpoint % num_of_cols]
+  while (start <= end) {
+    let mid = Math.floor((start + end) / 2);
+    let midElement = matrix[Math.floor(mid / cols)][mid % cols]; //mid / cols gives row; mid % cols gives column
+    if (midElement === target) {
+      return true;
+    }
+    else if (midElement < target) {
+      start = mid + 1;
+    }
+    else {
+      end = mid - 1;
+    }
+  }
+  return false;
+}
 
-    if number == target: return True
-
-    elif number < target:
-      front = midpoint + 1
-    else:
-      back = midpoint - 1
-
-  return False
-  */
+console.log(search2DMatrix2([[1, 3, 4, 5, 7], [10, 11, 12, 16, 20], [23, 24, 30, 34, 50]], 34));
