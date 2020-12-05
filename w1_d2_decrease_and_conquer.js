@@ -160,7 +160,6 @@ function closestValue(arr, target) {
   }
   return arr[end];
 }
-console.log(closestValue([1, 10, 22, 59, 67, 72, 100], 70));
 
 
 /*
@@ -186,7 +185,6 @@ console.log(closestValue([1, 10, 22, 59, 67, 72, 100], 70));
  */
 
 function squareRoot(n) {
-  // YOUR WORK HERE
   let start = 0;
   let end = n;
 
@@ -231,42 +229,63 @@ function squareRoot(n) {
  * `[1, 2, 3], 4 --> 0`
  * `[1, 10, 22, 59, 67, 72, 100], 13 --> 5`
  *
+ *
+ *   s          m             e
+ *   s  m       e             
+ *   s  e                     
+ * `[1, 10, 22, 59, 67, 72, 100], 13 --> 5`
+ *  if arr[start + 1] > target
+ *    return arr.length - 1 - start
+ *
+ *
+ *
+ *
+  let example = greaterValues([1, 2, 3, 5, 5, 7, 9, 10, 11], 5);
+  return example !== undefined && example === 4;
+});
+
+assert(testCount, 'should return 0 for number greater than largest in the array', () => {
+  let example = greaterValues([1, 2, 3], 4);
+  return example !== undefined && example === 0;
+});
+
+assert(testCount, 'should return greater values for number less than least in the array', () => {
+  let example = greaterValues([1, 10, 22, 59, 67, 72, 100], -2);
+ *
+ *
  */
 
 function greaterValues(arr, target) {
-  let end = arr.length - 1;
   let start = 0;
-  let mid = Math.floor((start + end) / 2);
+  let end = arr.length - 1;
 
-  if (target < arr[start]) {
-    return arr.length;
-  }
-  else if (target > arr[end]) {
+  if (!Array.isArray(arr) || target > arr[end]) {
     return 0;
   }
 
-  while (start != end) {
-    mid = Math.floor((start + end) / 2);
-    console.log("START IS " + start);
-    console.log("MID IS " + mid);
-    console.log("END IS " + end);
+  else if (target < arr[0]) {
+    return arr.length;
+  }
 
-    if (target == arr[mid]) {
-      console.log(arr.length - mid);
+  while (start <= end) {
+    let mid = Math.floor((start + end) / 2);
+
+    if (arr[mid] === target) {
       return (arr.length - 1) - mid;
     }
 
-    if (target < mid) {
-      end = mid;
+    if (arr[start + 1] > target) {
+      return (arr.length - 1) - start;
     }
-
-    else if (target > mid) {
-      start = mid;
+    else if (arr[mid] < target) {
+      start = mid + 1;
+    }
+    else if (arr[mid] > target) {
+      end = mid - 1;
     }
   }
   return -1;
 }
-
 
 
 /*
