@@ -17,60 +17,79 @@
  * Space: O(1)
  *
  * **Examples**
+ *            3
+ *            arrlength = 11
  * `[0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1] --> 8`
  * `[0, 0, 0] --> 0`
  * `[0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1] --> 7`
+ *
+ *   s           x                 e
+ *   s     x     e
+ *         s  x  e
+ * `[0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1] --> 8`
+ *
+ *
+ *
+ *   s              x                    e
+ *   s     x        e
+ *         s  x     e
+ * `[0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1] --> 8`
  */
 
 
 function numberOfOnes(arr) {
-  let end = arr.length - 1;
   let start = 0;
-  let  mid = Math.floor((start + end) / 2);
-
-  if (arr[start] == 1) {
-    return end + 1;
+  let end = arr.length - 1;
+  if (!Array.isArray(arr)) {
+    return 0;
   }
-  else if (arr[end] == 0) {
+  else if (arr[start] === 1) {
+    return arr.length;
+  }
+  else if (arr[end] === 0) {
     return 0;
   }
 
+  while (start <= end) {
+    let mid = Math.floor((start + end) / 2);
 
-  //while condition may need to change
-//`  while (arr[start + 1] != 1 && arr[end - 1] != 0) {
-  while (1) {
-//  while (arr[mid - 1] != 0 && arr[mid + 1] != 1) {
-//  while (arr[start] < 1) {
-//  while (arr[start] < 1 && arr[end] > 0) {
-    
-//    mid = Math.floor(start + end / 2);
-    mid = Math.floor((end + start) / 2);
-    console.log("\n");
-    console.log("\n");
-    console.log("END IS: " + end);
-    console.log("START IS: " + start);
-    console.log("END + START = " + (end + start));
-    console.log("MID SHOULD BE " + Math.floor((end + start) / 2));
-    console.log("MID IS: " + mid);
-
-
-
-    if (arr[start + 1] == 1 && arr[end - 1] == 0) {
-      console.log(arr.length - (start + 1));
-      return arr.length - (start + 1);
+    if (arr[mid] === 1 && arr[mid - 1] === 0) {
+      console.log(arr.length - mid);
+      return (arr.length - mid);
     }
-    if (arr[mid] == 0) {
-      console.log("Array is " + arr[mid] + " at " + mid);
-      start = mid;
-      console.log("Start adjusted to " + start);
+    else if (arr[mid] === 0) {
+      start = mid + 1;
     }
-    else if (arr[mid] == 1) {
-      console.log("Array is " + arr[mid] + " at " + mid);
-      end = mid;
-      console.log("End adjusted to " + end);
+    else if (arr[mid] === 1) {
+      end = mid - 1;
     }
   }
-  return -1;
+  return 0;
+
+  /*
+   * This also works
+  let start = 0;
+  let end = arr.length - 1;
+
+  if (arr[start] === 1) {
+    return arr.length;
+  }
+  else if (arr[end] === 0) {
+    return 0;
+  }
+
+  let mid = Math.floor((start + end) / 2);
+  while (start + 1 !== end) {
+    mid = Math.floor((start + end) / 2);
+    if (arr[mid] === 0) {
+      start = mid;
+    }
+    else if (arr[mid] === 1) {
+      end = mid;
+    }
+  }
+  return (arr.length - 1) - start;
+  */
 }
 
 
@@ -95,71 +114,53 @@ function numberOfOnes(arr) {
  * `[1, 2, 3, 5, 5, 7, 9, 10, 11], 6 --> 5`
  * `[1, 2, 3], 8 --> 3`
  * `[1, 10, 22, 59, 67, 72, 100], 70 --> 72`
+ *
+ *
+ *   s           m             e
+ *               s     m       e
+ *               s  m  e        
+ *  [1, 2, 3, 5, 5, 7, 9, 10, 11]
  */
 
 function closestValue(arr, target) {
-  // YOUR WORK HERE`
+  if (!Array.isArray(arr) || arr.length === 0) {
+    return -1;
+  }
+
   let start = 0;
   let end = arr.length - 1;
   let mid = Math.floor((start + end) / 2);
-  let difference1= 0;
-  let difference2 = 0;
 
-    if (target == arr[mid]) {
-      console.log("TARGET = MID");
-      console.log(arr[mid]);
+  console.log(arr);
+
+  while (start + 1 < end) {
+    mid = Math.floor((start + end) / 2);
+
+    if (arr[mid] === target) {
       return arr[mid];
     }
-    else if (target > arr[end]) {
-      console.log("TARGET LARGER THAN HIGHEST VALUE");
-      console.log(arr[end]);
-      return arr[end];
-    }
-    else if (target < arr[start]) {
-      console.log("TARGET SMALLER THAN LOWEST VALUE");
-      console.log(arr[start]);
-      return arr[start];
-    }
 
-  while (start != end) {
-    /*
-    mid = Math.floor((start + end) / 2);
-    console.log("\n");
-    console.log("\n");
-    console.log("START IS: " + start);
-    console.log("END IS: " + end);
-    console.log("MID IS: " + mid);
-    */
-
-
-    if (arr[mid - 1] < target && arr[mid + 1] > target) {
-      difference1 = target - arr[mid - 1];
-      difference2 = arr[mid + 1] - target;
-      if (difference1 <= difference2) {
-        console.log("SMALLER THAN OR EQUAL TO TARGET: " + arr[mid - 1]);
-        return arr[mid - 1];
-      }
-      else if (difference2 < difference1) {
-        console.log("LARGER THAN TARGET: " + arr[mid + 1]);
-        return arr[mid + 1];
-      }
-    }
-
-    else if (target < arr[mid]) {
-      console.log("Target < mid");
-      end = mid;
-      console.log("End adjusted to " + end);
-    }
-    else if (target > arr[mid]) {
-      console.log("Target > mid");
+    if (arr[mid] < target) {
       start = mid;
-      console.log("Start adjusted to " + start);
+    }
+    else if (arr[mid] > target) {
+      end = mid;
     }
   }
 
-  return -1;
-}
+  let diffStart = Math.abs(arr[start] - target);
+  let diffMid = Math.abs(arr[mid] - target);
+  let diffEnd = Math.abs(arr[end] - target);
 
+  if (Math.min(diffStart, diffMid, diffEnd) === diffStart) {
+    return arr[start];
+  }
+  if (Math.min(diffStart, diffMid, diffEnd) === diffMid) {
+    return arr[mid];
+  }
+  return arr[end];
+}
+console.log(closestValue([1, 10, 22, 59, 67, 72, 100], 70));
 
 
 /*
