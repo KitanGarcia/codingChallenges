@@ -185,9 +185,28 @@ console.log(closestValue([1, 10, 22, 59, 67, 72, 100], 70));
  * `14856 --> 121.885192
  */
 
-
 function squareRoot(n) {
   // YOUR WORK HERE
+  let start = 0;
+  let end = n;
+
+  while (start <= end) {
+    let mid = (start + end) / 2;
+    if (mid * mid == n) {
+      //this accounts enforces 6 decimal places or less
+      if ((mid * 1000000) % 1 > 0) {
+        return mid.toFixed(6);
+      }
+      return mid;
+    }
+    else if (mid * mid < n) {
+      start = mid;
+    }
+    else if (mid * mid > n) {
+      end = mid;
+    }
+  }
+  return -1;
 }
 
 
