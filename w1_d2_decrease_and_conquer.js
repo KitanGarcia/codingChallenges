@@ -238,21 +238,6 @@ function squareRoot(n) {
  *    return arr.length - 1 - start
  *
  *
- *
- *
-  let example = greaterValues([1, 2, 3, 5, 5, 7, 9, 10, 11], 5);
-  return example !== undefined && example === 4;
-});
-
-assert(testCount, 'should return 0 for number greater than largest in the array', () => {
-  let example = greaterValues([1, 2, 3], 4);
-  return example !== undefined && example === 0;
-});
-
-assert(testCount, 'should return greater values for number less than least in the array', () => {
-  let example = greaterValues([1, 10, 22, 59, 67, 72, 100], -2);
- *
- *
  */
 
 function greaterValues(arr, target) {
@@ -309,11 +294,153 @@ function greaterValues(arr, target) {
  * `[35, 46, 79, 102, 1, 14, 29, 31], 46 --> true`
  * `[35, 46, 79, 102, 1, 14, 29, 31], 47 --> false`
  * `[7, 8, 9, 10, 1, 2, 3, 4, 5, 6], 9 --> true`
+ *
+ *
+ * `[35, 46, 79, 102, 1, 14, 29, 31], 46 --> true`
+ *                should be
+ * `[1, 14, 29, 31, 35, 46, 79, 102], 46 --> true`
+ *
+ * find position where arr[i] > arr[i + 1]. this is where it got shifted.
+ * This can let us split the array into two sorted arrays
+ * binary search both
+ *
+ *
+ *   0    1   2   3   4  5   6   7
+ *   s            m              e
+ *   s   m        e               
+ * `[35, 46, 79, 102, 1, 14, 29, 31], 46
+ *
+ *
+ *   s            m              e
+ *   s        e                   
+ * `[35, 46, 79, 102, 1, 14, 29, 31], 14
+ *
+ *
+ *   s            m              e
+ *                    s  m       e
+ *                   esm         
+ * `[35, 46, 79, 102, 1, 14, 29, 31], 14
+ *
+ *
+ *   s            m              e
+ *  [7, 8, 9, 10, 1, 2, 3, 4, 5, 6], 7
+ *
+assert(testCount, 'returns true when target is in the array', () => {
+  let example = rotatedArraySearch([35, 46, 79, 102, 1, 14, 29, 31], 46);
+  return example !== undefined && example === true;
+});
+
+assert(testCount, 'returns false when target is not in the array', () => {
+  let example = rotatedArraySearch([35, 46, 79, 102, 1, 14, 29, 31], 47);
+  return example !== undefined && example === false;
+});
+
+assert(testCount, 'returns true when target is the first number in the array', () => {
+  let example = rotatedArraySearch([7, 8, 9, 10, 1, 2, 3, 4, 5, 6], 7);
+  return example !== undefined && example === true;
+});
+
+assert(testCount, 'returns true when target is the last number in the array', () => {
+  let example = rotatedArraySearch([7, 8, 9, 10, 1, 2, 3, 4, 5, 6], 6);
+  return example !== undefined && example === true;
+});
+
+
+[4,5,6,7,0,1,2]
+3
  */
 
 
 function rotatedArraySearch(nums, target) {
-  // YOUR WORK HERE
+  let start = 0;
+  let end = nums.length - 1;
+
+  //this is used to find where the pivot is. Now we can consider as two sorted arrays
+  while (start < end) {
+    let mid = Math.floor((start + end) / 2);
+
+    if (nums[mid] < nums[end]) {
+      end = mid;
+    }
+    else if (nums[mid] > nums[end]) {
+      start = mid + 1;
+    }
+  }
+  let splitIndex = end;
+
+  function binarySearch(array, target, start, end) {
+    while (start <= end) {
+      let mid = Math.floor((start + end) / 2);
+
+      if (nums[mid] === target) {
+        return true;
+      }
+      else if (nums[mid] < target) {
+        start = mid + 1;
+      }
+      else if (nums[mid] > target) {
+        end = mid - 1;
+      }
+    }
+    return false;
+  }
+
+  let search1 = binarySearch(nums, target, 0, splitIndex);
+  let search2 = binarySearch(nums, target, splitIndex, nums.length - 1);
+  return search1 || search2;
+
+  /*
+  start = 0;
+  end = splitIndex;
+  while (start <= end) {
+    mid = Math.floor((start + end) / 2);
+
+    if (nums[mid] === target) {
+      return true;
+    }
+    else if (nums[mid] < target) {
+      start = mid + 1;
+    }
+    else if (nums[mid] > target) {
+      end = mid - 1;
+    }
+  }
+
+  start = splitIndex;
+  end = nums.length - 1;
+  while (start <= end) {
+    mid = Math.floor((start + end) / 2);
+
+    if (nums[mid] === target) {
+      return true;
+    }
+    else if (nums[mid] < target) {
+      start = mid + 1;
+    }
+    else if (nums[mid] > target) {
+      end = mid - 1;
+    }
+  }
+  return false;
+  */
+
+
+  /*
+  while (start <= end) {
+    let mid = Math.floor((start + end) / 2);
+
+    if (arr[start] > arr[end]) {
+      splitIndex = start;
+      break;
+    }
+    else if (arr[mid] > target) {
+      start = mid + 1;
+    }
+    else if (arr[mid] < target) {
+      end = mid - 1;
+    }
+  }
+  */
 }
 
 
