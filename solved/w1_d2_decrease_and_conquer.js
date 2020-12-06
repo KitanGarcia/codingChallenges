@@ -131,8 +131,6 @@ function closestValue(arr, target) {
   let end = arr.length - 1;
   let mid = Math.floor((start + end) / 2);
 
-  console.log(arr);
-
   while (start + 1 < end) {
     mid = Math.floor((start + end) / 2);
 
@@ -322,32 +320,13 @@ function greaterValues(arr, target) {
  * `[35, 46, 79, 102, 1, 14, 29, 31], 14
  *
  *
- *   s            m              e
- *  [7, 8, 9, 10, 1, 2, 3, 4, 5, 6], 7
- *
-assert(testCount, 'returns true when target is in the array', () => {
-  let example = rotatedArraySearch([35, 46, 79, 102, 1, 14, 29, 31], 46);
-  return example !== undefined && example === true;
-});
-
-assert(testCount, 'returns false when target is not in the array', () => {
-  let example = rotatedArraySearch([35, 46, 79, 102, 1, 14, 29, 31], 47);
-  return example !== undefined && example === false;
-});
-
-assert(testCount, 'returns true when target is the first number in the array', () => {
-  let example = rotatedArraySearch([7, 8, 9, 10, 1, 2, 3, 4, 5, 6], 7);
-  return example !== undefined && example === true;
-});
-
-assert(testCount, 'returns true when target is the last number in the array', () => {
-  let example = rotatedArraySearch([7, 8, 9, 10, 1, 2, 3, 4, 5, 6], 6);
-  return example !== undefined && example === true;
-});
-
-
-[4,5,6,7,0,1,2]
-3
+ *   Finding pivot
+ *   0  1  2  3   4   5   6   7  8  9
+ *   s            m                 e
+ *                    s       m     e
+ *                    s   m   e      
+ *                        m   es      
+ *  [7, 8, 9, 10, 11, 12, 13, 1, 5, 6], 7
  */
 
 
@@ -388,59 +367,6 @@ function rotatedArraySearch(nums, target) {
   let search1 = binarySearch(nums, target, 0, splitIndex);
   let search2 = binarySearch(nums, target, splitIndex, nums.length - 1);
   return search1 || search2;
-
-  /*
-  start = 0;
-  end = splitIndex;
-  while (start <= end) {
-    mid = Math.floor((start + end) / 2);
-
-    if (nums[mid] === target) {
-      return true;
-    }
-    else if (nums[mid] < target) {
-      start = mid + 1;
-    }
-    else if (nums[mid] > target) {
-      end = mid - 1;
-    }
-  }
-
-  start = splitIndex;
-  end = nums.length - 1;
-  while (start <= end) {
-    mid = Math.floor((start + end) / 2);
-
-    if (nums[mid] === target) {
-      return true;
-    }
-    else if (nums[mid] < target) {
-      start = mid + 1;
-    }
-    else if (nums[mid] > target) {
-      end = mid - 1;
-    }
-  }
-  return false;
-  */
-
-
-  /*
-  while (start <= end) {
-    let mid = Math.floor((start + end) / 2);
-
-    if (arr[start] > arr[end]) {
-      splitIndex = start;
-      break;
-    }
-    else if (arr[mid] > target) {
-      start = mid + 1;
-    }
-    else if (arr[mid] < target) {
-      end = mid - 1;
-    }
-  }
-  */
 }
 
 
@@ -465,10 +391,38 @@ function rotatedArraySearch(nums, target) {
  * **Examples**
  * `487, 734 --> 357458`
  * `846, 908--> 768168`
+ *
+ *
+ * put one number in one column and the 2nd number in another
+ * double the first number and halve the second number (drop the remainder)
+ * continue until the number in the second column is 1
+ * then, the product is the sum of the number of the first column
+ *
+ * We only add to the sum if the halved number is odd!
+ * Example: 9 * 7
+ * 9         7
+ * 18        3
+ * 36        1
+ * 63
+ *
+ * sum = 9
+ * b = 7
+ *
+ * 3   prod = 18
+ * 1   prod = 36
+ *
+ *
  */
 
 function  multiplicationRussianPeasant(a, b) {
-  // YOUR WORK HERE
+  let sum = b;
+  let product = b;
+  while (a > 1) {
+    a = Math.floor(a >> 1);
+    product = product << 1;
+    sum = (a % 2) === 1 ? sum + product : sum
+  }
+  return sum;
 }
 
 
