@@ -37,16 +37,28 @@
  *          3
  */
 function printArray(arr){
-  let returnArr = [];
-  function logElement(i) {
-    if (i < arr.length) {
-      returnArr[i] = arr[i];
-      logElement(i + 1);
+  function traverse(index) {
+    if (index === arr.length) {
+      return;
     }
+    console.log(arr[index]);
+    traverse(index + 1);
   }
-  logElement(0);
-  console.log(returnArr);
-  return returnArr;
+  traverse(0);
+
+  //Another solution
+  /*
+  function logElement(arr, i) {
+    if (i < arr.length) {
+      console.log(arr[i]);
+    }
+    else {
+      return;
+    }
+    logElement(arr, i + 1);
+  }
+  logElement(arr, 0);
+  */
 }
 
 
@@ -63,16 +75,14 @@ function printArray(arr){
  *          1
  */
 function printReverse(arr) {
-  let returnArr = [];
-  function reverseLogElement(i) {
-    if (i >= 0) {
-      returnArr.push(arr[i]);
-      reverseLogElement(i - 1);
+  function logElement(i) {
+    if (i === -1) {
+      return;
     }
+    console.log(arr[i]);
+    logElement(i - 1);
   }
-  reverseLogElement(arr.length - 1);
-  console.log(returnArr);
-  return returnArr;
+  logElement(arr.length - 1);
 }
 
 
@@ -85,16 +95,16 @@ function printReverse(arr) {
  * Example: reverseString('hello') => 'olleh'
  */
 function reverseString(str){
-  let returnString = "";
-  function reverseString(i) {
-    if (i < str.length) {
-      returnString = returnString + str[(str.length - 1) - i];
-      reverseString(i + 1);
+  let reversed = "";
+  function reverse(i) {
+    if (i === -1) {
+      return;
     }
+    reversed += str[i];
+    reverse(i - 1);
   }
-  reverseString(0);
-  console.log(returnString);
-  return returnString;
+  reverse(str.length - 1);
+  return reversed;
 }
 
 
@@ -108,16 +118,16 @@ function reverseString(str){
  * Example: arrayPairs([1, 2, 3, 4, 5])     =>    [[1,2], [3,4], [5, undefined]]
  */
  function arrayPairs(arr) {
-   let returnArr = [];
-   function pairArrays(i) {
-     if (i < arr.length) {
-       returnArr.push([arr[i], arr[i + 1]]);
-       pairArrays(i + 2);
+   let resultArray = [];
+   function pair(i) {
+     if (i >= arr.length) {
+       return;
      }
+     resultArray.push([arr[i], arr[i + 1]]);
+     pair(i + 2);
    }
-   pairArrays(0);
-   console.log(returnArr);
-   return returnArr;
+   pair(0);
+   return resultArray;
  }
 
 /*
@@ -129,7 +139,19 @@ function reverseString(str){
  * Example: flatten([1, [2, 3, [4]], 5, [[6]]]) => [1, 2, 3, 4, 5, 6]
  */
 function flatten(arr){
-  // YOUR WORK HERE
+  let result = [];
+  function recurse(subarray) {
+    for (let i = 0; i < subarray.length; i++) {
+      if (Array.isArray(subarray[i])) {
+        recurse(subarray[i]);
+      }
+      else {
+        result.push(subarray[i]);
+      }
+    }
+  }
+  recurse(arr);
+  return result;
 }
 
 /*
@@ -145,14 +167,14 @@ function flatten(arr){
  */
 function power(base, exponent) {
   let result = 1;
-  function computePower(i) {
-    if (i <= exponent) {
-      result = result * base;
-      computePower(i + 1);
+  function multiplyBase(i) {
+    if (i > exponent - 1) {
+      return;
     }
+    result = result * base;
+    multiplyBase(i + 1);
   }
-  computePower(1);
-  console.log(result);
+  multiplyBase(0);
   return result;
 }
 
@@ -164,9 +186,36 @@ function power(base, exponent) {
  * Output:  Array
  *
  * Example: merge([1, 4, 7], [2, 3, 6, 9]) => [1, 2, 3, 4, 6, 7, 9]
+ *
+ *  i            j
+ *     i         j                push 1
+ *     i            j             push 2
+ *     i               j          push 3
+ *        i            j          push 4
+ *        i               j       push 6
+ *           i            j       push 7
+ *           i               j    push 9
+ * [1, 4, 7]    [2, 3, 6, 9]
  */
 function merge(arr1, arr2){
-  // YOUR WORK HERE
+  let result = [];
+  const totalElements = arr1.length + arr2.length;
+  function compare(i, j) {
+    if (i + j >= totalElements) {
+      return;
+    }
+    if (j >= arr2.length || (i < arr1.length && arr1[i] < arr2[j])) {
+      result.push(arr1[i]);
+      i++;
+    }
+    else {
+      result.push(arr2[j]);
+      j++;
+    }
+    compare(i, j);
+  }
+  compare(0, 0);
+  return result;
 }
 
 
