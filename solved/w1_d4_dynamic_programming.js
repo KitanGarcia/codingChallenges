@@ -14,13 +14,70 @@
  *             output = 13 (6 + -1 + 3 + 5 = 13)
  *
  *
+ *                                    6
+ *           6-1
+ *  6-1+3
+ *
+ *               
+ *
+ *
+ * Use recursion to find sums and add them to array
+ * Then, find the max
+ *
  */
 
 // Time Complexity:
 // Auxiliary Space Complexity:
 function maxConsecutiveSum(arr) {
-  //YOUR WORK HERE
+  if (arr.length === 0) {
+    return 0;
+  }
+
+  let sumsArray = [];
+
+  function findSums(sum, index) {
+    if (index === arr.length - 1) {
+      sum += arr[index];
+      sumsArray.push(sum);
+      return;
+    }
+
+    //recurse to find sums from x index to end
+    //find all sums. Add all permutations of adjacent numbers
+    sum += arr[index];
+    sumsArray.push(sum)
+    findSums(sum, index + 1);
+  }
+  //put this in a loop to find from 0 to length of array
+  for (let i = 0; i < arr.length; i++) {
+    findSums(0, i);
+  }
+  return Math.max(...sumsArray);
 }
+console.log(maxConsecutiveSum([6, -1, 3, 5, -10]));
+
+//FASTER SOLUTION
+function maxConsecutiveSum2(arr) {
+  let local = arr[0];
+  let ultimate = arr[0];
+
+  for (let i = 1; i < arr.length; i++) {
+    local = Math.max(local + arr[i], arr[i]);
+    ultimate = Math.max(local, ultimate);
+  }
+  return ultimate ? ultimate : 0;
+}
+
+//EVEN FASTER
+function maxConsecutiveSum3(arr) {
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i-1] > 0) {
+      arr[i] += arr[i-1];
+    }
+  }
+  return Math.max(...arr);
+}
+console.log(maxConsecutiveSum3([6, -1, 3, 5, -10]));
 
 
 /*
@@ -36,18 +93,44 @@ function maxConsecutiveSum(arr) {
  *
  *  Example: bitFlip([0,1,1,1,0,1,0,1,0,0], 2)
  *  Result: 7
+ *
+ * find first and last one. Sub array.
+ *
+ * [0,1,1,1,0,1,0,1,1,0]
+ *
+ * n = 2
+ * se
+ * [0,1,1,1,0,1,0,1,1,0]
+ *
  */
 
 /*
  * keep track of current distance and max distance so work is not repeated
  * use left pointer and right pointer
  */
-// Time Complexity:
-// Auxiliary Space Complexity:
+// Time Complexity: O(n)
+// Auxiliary Space Complexity: O(1)
 function bitFlip (arr, n) {
-  //YOUR WORK HERE
-}
+  let max = 0;
+  let start = 0;
+  let end = 0;
 
+  while (end < arr.length) {
+    if (arr[end] === 0) {
+      n--;
+    }
+    end++;
+    while (n < 0) {
+      if (arr[start] === 0) {
+        n++;
+      }
+      start++;
+    }
+    max = Math.max(max, end - start);
+  }
+  return max;
+}
+console.log(bitFlip([0,0,0,1,0,1,1,0], 3));
 
 
 ////////////////////////////////////////////////////////////
