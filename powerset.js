@@ -47,3 +47,42 @@ function powerset(str) {
 
 console.log(powerset("ab"));
 console.log(powerset("abc"));
+
+
+
+//CORRECT SOLUTION O(2^N)
+function powerset2(str) {
+  let result = [];
+  let result2 = [];
+  function calculate(substring) {
+    if (substring.length === str.length) {
+      result.push(substring);
+      return;
+    }
+    calculate(substring + "0");
+    calculate(substring + "1");
+  }
+
+  calculate("");
+
+
+  for (let i = 0; i < result.length; i++) {
+    let tempString = "";
+    if (result[i][0] == 1) {
+      tempString += "a";
+    }
+    if (result[i][1] == 1) {
+      tempString += "b";
+    }
+    if (result[i][2] == 1) {
+      tempString += "c";
+    }
+    result2.push(tempString);
+  }
+  return result2;
+}
+console.log("-----------------");
+console.log("-----------------");
+
+console.log(powerset2("ab"));
+console.log(powerset2("abc"));

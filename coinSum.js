@@ -38,21 +38,23 @@
  */
 
 function coinSum(coins, total) {
-    // Write your code here
-    
-    //do we need a base case for 1
-    
-    function addCoin(difference) {
-      //first check if in cache
-      if (difference == 0) {
-        return 1;
-      }
-      if (difference < 0) {
-        return 0;
-      }
-      addCoin(total - )
+  let count = 0;
+  function sumCoins(sum, coin) {
+    if (sum === total) {
+      return 1;
     }
+    else if (sum > total) {
+      return 0;
+    }
+    return sumCoins(sum + coin, coins[0]) + sumCoins(sum + coin, coins[1]) + sumCoins(sum + coin, coins[2]);
+  }
+  
+  return sumCoins(0, 0);
 }
+//need to get rid of duplicates
+console.log(coinSum([1, 2, 3], 4)); //should output 4
+console.log(coinSum([1, 2, 4], 5)); //should also output 4
+console.log(coinSum([1, 3, 5, 7], 8)); //should output 6
 
 //order doesn't matter. Watch out for equivalent answer 5 + 3 + 2 is the same as 2 + 5 + 3
 //table = [];
