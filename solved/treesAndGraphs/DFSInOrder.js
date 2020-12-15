@@ -2,7 +2,7 @@
  * Using recursion or iteration with a while loop, write a function that takes the root of a binary tree node and outputs an array of values ordered by depth first search
  */
 
-function DFSPreOrder(root) {
+function DFSInOrder(root) {
   if (!root) {
     return [];
   }
@@ -13,27 +13,26 @@ function DFSPreOrder(root) {
       return null;
     }
 
-    result.push(curr.val);
     traverse(curr.left);
+    result.push(curr.val);
     traverse(curr.right);
   }
-
   traverse(root);
   return result;
 }
 
 //FASTER PURE RECURSION SOLUTION
-function preorderTraversal(root, result = []) {
+function inOrderTraversal(root, result = []) {
   if (!root) {
     return [];
   }
-  result.push(root.val);
-  
+
   if (root.left) {
-    preorderTraversal(root.left, stack, result);
+    inorderTraversal(root.left, result);
   }
+  result.push(root.val);
   if (root.right) {
-    preorderTraversal(root.right, stack, result)
+    inorderTraversal(root.right, result);
   }
   return result;
 }
