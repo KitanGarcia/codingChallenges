@@ -81,23 +81,37 @@
  */
 
 
- //n is width; m is height
- //working backwards from destination to source
- function latticePaths(m, n) {
-   //boundary is breached
-   if (m < 0 || n < 0) {
-     return 0;
-   }
+//n is width; m is height
+//working backwards from destination to source
+function latticePaths(m, n) {
+  //boundary is breached
+  if (m < 0 || n < 0) {
+    return 0;
+  }
 
-   //reached destination (or source how you view it)
-   if (m == 0 && n == 0) {
-     return 1;
-   }
+  //reached destination (or source how you view it)
+  if (m == 0 && n == 0) {
+    return 1;
+  }
 
-   let up = latticePaths(m - 1, n);
-   let left = latticePaths(m, n - 1);
+  let up = latticePaths(m - 1, n);
+  let left = latticePaths(m, n - 1);
 
-   //up and left are calculated each execution, so returning one simply acts as a count
-   return up + left;
- }
+  //up and left are calculated each execution, so returning one simply acts as a count
+  return up + left;
+}
 console.log(latticePaths(2, 3));
+
+
+function latticePathsDP(m, n) {
+  const dp = new Array(n + 2).fill(1);
+
+  for (let row = m; row > 0; row--) {
+    for (let col = n; col > 0; col--) {
+      dp[col] = dp[col] + dp[col + 1];
+      console.log(dp);
+    }
+  }
+  return dp[1];
+}
+console.log(latticePathsDP(2, 3));

@@ -39,3 +39,6 @@ Example 3:
  does not go off of the matrix, and does not travel back on itself. Think of this as a graph
  traversal problem where you note the nodes you've visited in some way
  */
+
+function robotPaths() {
+}
