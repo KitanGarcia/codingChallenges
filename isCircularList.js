@@ -213,7 +213,20 @@ class LinkedList {
 //                       1     -     2    -     10    -  3
 //return boolean
 function isCircular(node) {
-  console.log("NEED TO COMPLETE THIS FUNCTION");
+  if (node === null) {
+    return false;
+  }
+
+  let slow = node;
+  let fast = node.next;
+  while (slow !== fast) {
+    if (fast === null || fast.next === null) {
+      return false;
+    }
+    slow = slow.next;
+    fast = fast.next.next
+  }
+  return true;
 }
 
 let nodes = [];
