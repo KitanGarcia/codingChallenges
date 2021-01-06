@@ -5,7 +5,7 @@
 
 
 //divide into two regions, sorted and unsorted. Sorted will start at 0 and grow into unsorted region
-//check if element is in first position
+//check if element is in first position of unsorted
 //check if element is less than element immediately to its left
 //
 /* 3 9 1 4 7

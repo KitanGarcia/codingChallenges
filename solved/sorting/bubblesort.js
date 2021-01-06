@@ -35,7 +35,7 @@ function bubblesort(input) {
       }
     }
 
-    //if no swap occurred, then the whole array was sorted
+    //if no swap occurred, then the whole array was sorted to begin with
     if (!swap) {
       break;
     }
