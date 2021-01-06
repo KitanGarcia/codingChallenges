@@ -45,5 +45,20 @@ function bitArraySort2(arr) {
   return arr;
 }
 
+
+//BEST SOLUTION
+//Time: O(n)
+//Space: O(1)
+function bitArraySortr(arr) {
+  let mid = 0;
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] === 0) {
+      [ arr[mid], arr[i] ] = [ arr[i], arr[mid] ];
+      mid++;
+    }
+  }
+  return arr;
+}
+
 console.log(bitArraySort(input));
 console.log(bitArraySort2(input));
