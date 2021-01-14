@@ -81,8 +81,13 @@ function powerset2(str) {
   }
   return result2;
 }
+
+
+
+
 console.log("-----------------");
 console.log("-----------------");
 
 console.log(powerset2("ab"));
 console.log(powerset2("abc"));
+console.log(powerset3("abc"));

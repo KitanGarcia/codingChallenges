@@ -52,9 +52,32 @@ function coinSum(coins, total) {
   return sumCoins(0, 0);
 }
 //need to get rid of duplicates
+//
+
+//CORRECT IMPLEMENTATION
+function coinSum2(coins, total) {
+  let table = new Array(total + 1);
+  table.fill(0);
+  table[0] = 1;
+
+  coins.forEach(coin => {
+    for (let i = coin; i < table.length; i++) {
+      table[i] = table[i] + table[i - coin];
+    }
+    console.log(table);
+  });
+  return table[table.length - 1];
+}
+
+
+
 console.log(coinSum([1, 2, 3], 4)); //should output 4
 console.log(coinSum([1, 2, 4], 5)); //should also output 4
 console.log(coinSum([1, 3, 5, 7], 8)); //should output 6
+
+console.log(coinSum2([1, 2, 3], 4)); //should output 4
+console.log(coinSum2([1, 2, 4], 5)); //should also output 4
+console.log(coinSum2([1, 3, 5, 7], 8)); //should output 6
 
 //order doesn't matter. Watch out for equivalent answer 5 + 3 + 2 is the same as 2 + 5 + 3
 //table = [];
