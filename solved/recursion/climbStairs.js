@@ -83,6 +83,17 @@ function climbStairsMemo(n) {
 
 console.log(climbStairsMemo(6));
 
+//Shortened memoization
+function climbStairsMemo2(n, memo = {1: 1, 2: 2}) {
+  if (memo[n]) {
+    return memo[n];
+  }
+  memo[n] = climbStairsMemo2(n - 1, memo) + climbStairsMemo2(n - 2, memo);
+  return memo[n];
+}
+
+console.log(climbStairsMemo2(6));
+
 
 
 //Tabulation
