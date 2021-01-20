@@ -65,3 +65,37 @@ Algorithm:
   1. Get number of elements
   2. Height = log(number of elements + 1) / log(2)
 */
+
+
+function heapHeight(heap) {
+  let length = heap.length;
+
+  //2 ^ height - 1 = length
+  //2 ^ height = length + 1
+  
+  return Math.ceil(Math.log(length + 1) / Math.log(2));
+}
+
+let input = [3, 4, 7, 6, 12, 9, 10, 16, 20, 13, 17, 30, 15, 11, 14];
+let input2 = [3];
+let input3 = [];
+let input4 = [3, 4, 8];
+let input5 = [3, 4, 8, 2, 5, 7, 9];
+console.log(heapHeight(input));
+console.log(heapHeight(input2));
+console.log(heapHeight(input3));
+console.log(heapHeight(input4));
+console.log(heapHeight(input5));
+
+/*
+               3                1
+
+              [ ]               0
+
+               3
+            4     8             2
+
+               3
+            4     8
+           2 5   7 9            3
+ */

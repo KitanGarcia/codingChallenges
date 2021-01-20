@@ -37,6 +37,13 @@
  * 
  */
 
+
+
+
+//EXPLANATION IS AT BOTTOM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
 function coinSum(coins, total) {
   let count = 0;
   function sumCoins(sum, coin) {
@@ -58,10 +65,12 @@ function coinSum(coins, total) {
 
 //BEST IMPLEMENTATION
 function coinSum2(coins, total) {
+  //instantiate table as 1 0 0 0 0 0 0 for 0 coins
   let table = new Array(total + 1);
   table.fill(0);
   table[0] = 1;
 
+  //the table will get overwritten each time so it can stay 1D
   coins.forEach(coin => {
     for (let i = coin; i < table.length; i++) {
       table[i] = table[i] + table[i - coin];
