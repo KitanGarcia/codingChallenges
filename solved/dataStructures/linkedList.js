@@ -159,32 +159,6 @@ class LinkedList {
     }
     return false;
   }
-
-  /*
-  print() {
-    let current = this.head;
-    while (current !== null) {
-      console.log(current.value);
-      current = current.next;
-    }
-  }
-    */
 }
 
 module.exports = {Node, LinkedList};
-
-let node1 = new Node(1);
-
-let list1 = new LinkedList(node1);
-list1.append(2);
-list1.append(3);
-list1.append(5);
-list1.append(7);
-list1.insert(4, 3);
-list1.insert(6, 5);
-
-//if we have 1, 2, 3, 4, 5, 6, 7
-//the below will result in 2, 3, 4, 6
-list1.delete(4);
-list1.delete(0);
-list1.delete(4);
