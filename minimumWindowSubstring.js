@@ -91,7 +91,10 @@ var minWindowSubstring = function(s, t) {
   return min;
 };
 
-let str = "ADOBECODEBANC";
-let sub = "ABC";
+//let str = "ADOBECODEBANC";
+//let sub = "ABC";
+
+let str = "ADOBECODAEBANC";
+let sub = "ABAC";
 
 console.log(minWindowSubstring(str, sub));
