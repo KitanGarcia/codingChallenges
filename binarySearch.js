@@ -10,8 +10,14 @@
 */
 
 let input = [1,3,4,5,6,7,8,10,11,13,15,17,20,22];
+let input2 = [1,3,4,5,6,7,8,10,11,13,15,16,20,22,23];
+let input3 = [1,3,4,5,6,7,8,10,11,13,15,17,20,22,23];
 let target = 17;
+let target2 = 23;
+let target3 = 17;
+let target4 = 1;
 
+/*
 function sleep(milliseconds) {
   const date = Date.now();
   let currentDate = null;
@@ -19,6 +25,7 @@ function sleep(milliseconds) {
     currentDate = Date.now();
   } while (currentDate - date < milliseconds);
 }
+*/
 
 function binarySearch(array, target) {
   let start = 0;
@@ -41,3 +48,6 @@ function binarySearch(array, target) {
 }
 
 console.log(binarySearch(input, target));
+console.log(binarySearch(input2, target2));
+console.log(binarySearch(input3, target3));
+console.log(binarySearch(input3, target4));

@@ -130,6 +130,8 @@ function robHousesDP(array) {
   return dp[array.length];
 }
 
+
+
 //LIKE DP SOLUTION, BUT NO NEED FOR WHOLE TABLE, JUST 2 VALS
 function robHouses(array) {
   if (array.length === 0) {
