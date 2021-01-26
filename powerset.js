@@ -50,38 +50,38 @@ console.log(powerset("abc"));
 
 
 
-//CORRECT SOLUTION O(2^N)
-function powerset2(str) {
-  let result = [];
-  let result2 = [];
-  function calculate(substring) {
-    if (substring.length === str.length) {
-      result.push(substring);
+//CORRECT SOLUTION
+//O(2^n) for findCombos?
+//O(n^2) for double for loop, BUT the outer loop is 2^n iterations and inner is n
+//Time Complexity: O(2^n)?
+//Space Complexity: O(2^n)
+function powerset2(input) {
+  let combos = [];
+  function findCombos(substring) {
+    if (substring.length === input.length) {
+      combos.push(substring);
       return;
     }
-    calculate(substring + "0");
-    calculate(substring + "1");
+    findCombos(substring + "1");
+    findCombos(substring + "0");
   }
+  
+  findCombos("");
 
-  calculate("");
 
-
-  for (let i = 0; i < result.length; i++) {
-    let tempString = "";
-    if (result[i][0] == 1) {
-      tempString += "a";
+  let result = [];
+  for (let i = 0; i < combos.length; i++) {
+    let string = combos[i];
+    let resultString = "";
+    for (let j = 0; j < string.length; j++) {
+      if (string[j] === "1") {
+        resultString += input[j];
+      }
     }
-    if (result[i][1] == 1) {
-      tempString += "b";
-    }
-    if (result[i][2] == 1) {
-      tempString += "c";
-    }
-    result2.push(tempString);
+    result.push(resultString);
   }
-  return result2;
+  return result;
 }
-
 
 
 
@@ -90,4 +90,4 @@ console.log("-----------------");
 
 console.log(powerset2("ab"));
 console.log(powerset2("abc"));
-console.log(powerset3("abc"));
+console.log(powerset2("abcd"));
