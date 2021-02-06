@@ -70,6 +70,45 @@
  *        (gp) 5r     8p (p)
  *      (u) 2b
  *
+ *
+ *
+ * Remove Node:
+ * Remove node as you would in a normal binary search tree. 3 scenarios:
+ *   1. leaf node
+ *   2. has 1 child
+ *   3. has 2 children
+ *
+ * 1. Remove 1
+ *           5
+ *        2     8
+ *      1   3  7 9
+ *        becomes
+ *           5
+ *        2     8
+ *         3   7 9
+ *
+ *
+ * 2. Remove 2
+ *           5
+ *        2     8
+ *      1      7 9
+ *        becomes
+ *           5
+ *        1     8
+ *             7 9
+ *
+ * 3. Remove 5
+ *          5
+ *    2           8
+ *  1   3       6   9
+ *               7    10
+ *         becomes
+ *          6
+ *    2           8
+ *  1   3       7   9
+ *                    10
+ *
+ * For this case, we need to find the next in-order successor (find the right child's leftmost element). Then, set a reference to the in-order successor's right child. Then, replace the deleted node with the in-order successor. Then set in-order successor's parent.left equal to the reference
  */
 
 class Node {
@@ -286,10 +325,93 @@ class RedBlackTree {
   search(target) {
   }
 
-  //remove node if it exists
-  remove(val) {
+  getCurrentNodePosition(child, parent) {
+    if (parent.left === child) {
+      return "left"
+    }
+    else {
+      return "right";
+    }
   }
 
+  //remove node if it exists
+  remove(val) {
+    const nodePath = this.findNodePath(val);
+
+    //no node to be found. Done
+    if (nodePath.length === 0) {
+      return;
+    }
+
+    let nodeToRemove = nodePath.pop();
+
+    //remove leaf node
+    if (nodeToRemove.left === null && nodeToRemove.right === null) {
+      //if removed node is red
+      if (nodeToRemove.color === "red") {
+        let parent = nodePath.pop();
+        let position = this.getCurrentNodePosition(nodeToRemove, parent);
+        parent[position] = null;
+      }
+    }
+    else if (nodeToRemove.left !== null && nodeToRemove.right !== null) {
+      let inOrdeSuccessorParent = nodeToRemove.right;
+      let inOrderSuccessor = nodeToREmoveRightChild;
+
+      while (inOrderSuccessor.left !== null) {
+        inOrdeSuccessorParent = inOrderSuccessor;
+        inOrderSuccessor = inOrderSuccessor.left;
+      }
+
+      let ref = inOrderSuccessor.right;
+
+      inOrderSuccessor.right = null;
+
+      //double check this code block
+      inOrderSuccessor.left = nodeToRemove.left;
+      if (nodeToRemove.right !== inOrderSuccessor) {
+        inOrderSuccessor.right = nodeToRemove.right;
+      }
+
+
+      let parent = nodePath.pop();
+      if (parent === undefined) {
+        return;
+      }
+
+      let position = this.getCurrentNodePosition(nodeToRemove, parent);
+      parent[position] = inOrderSuccessor;
+
+      if (nodeToRemove.right !== inOrderSuccessor) {
+        nodeToRemoveRightChild.left = ref;
+      }
+    }
+
+  }
+
+  //find the collection of nodes from the root to the desired value
+  findNodePath(val) {
+    const nodePath = [];
+    let current = this.root;
+
+    while (current !== null) {
+      nodePath.push(current);
+
+      if (current.val === val) {
+        return nodePath
+      }
+
+      if (val < current.val) {
+        current = current.left;
+      }
+      else {
+        current = current.right;
+      }
+    }
+
+    //if value can't be found in the tree
+    return [];
+  }
 }
 
 let rbTree = new RedBlackTree();
