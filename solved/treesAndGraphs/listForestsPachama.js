@@ -22,12 +22,9 @@ function listForests(array) {
   for (let i = 0; i < map.length; i++) {
     for (let j = 0; j < map[0].length; j++) {
 
-      //if the value is a 1 that has not been visited, perform bfs
+      //if the value is a 1 that has not been visited, perform bfs or dfs
       if (map[i][j] == 1 && !visited.has(i + "_" + j)) {
-        console.log(i, j);
-        visited.add(i + "_" + j);
-        //result.push([i, j]);
-        result = result.concat(bfs(map, visited, i, j));
+        result = result.concat(dfs(map, visited, i, j));
       }
     }
   }
@@ -38,6 +35,7 @@ function bfs(map, visited, i, j) {
   let result = [];
   let queue = [];
   queue.push([i, j]);
+  visited.add(i + "_" + j);
 
   while (queue.length > 0) {
     let current = queue.shift();
@@ -66,7 +64,6 @@ function getNeighbors(map, i, j) {
   let neighbors = [];
   let tuple = [];
 
-
   if (i < map.length - 1) {
     if (map[i + 1][j] == 1) {
       neighbors.push([i + 1, j]);
@@ -86,6 +83,61 @@ function getNeighbors(map, i, j) {
   }
   return neighbors;
 }
+
+
+function dfs(map, visited, i, j) {
+  let result = [];
+  let stack = [];
+  stack.push([i, j]);
+  visited.add(i + "_" + j);
+
+  while (stack.length > 0) {
+    let current = stack.pop();
+    result.push(current);
+
+    let neighbors = getNeighbors(map, current[0], current[1]);
+    /*
+    console.log("Queue: " + stack);
+    console.log("Current: " + current);
+    console.log("Visited: ");
+    console.log(visited);
+    console.log("Neighbors: " + neighbors);
+    */
+
+    for (let tuple of neighbors) {
+      if (!visited.has(tuple[0] + "_" + tuple[1])) {
+        stack.push(tuple);
+        visited.add(tuple[0] + "_" + tuple[1]);
+      }
+    }
+  }
+  return result;
+}
+
+
+function dfsRecursive(map, visited, i, j) {
+  let result = [];
+
+  function traverse(current) {
+    if (visited.has(current[0] + "_" + current[1])) {
+      return;
+    }
+
+    visited.add(current[0] + "_" + current[1]);
+    result.push(current);
+
+    let neighbors = getNeighbors(map, current[0], current[1]);
+    for (let tuple of neighbors) {
+      traverse(tuple);
+    }
+  }
+
+  traverse([i, j]);
+
+  return result;
+}
+
+
 
 let input =  [[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
               [ 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0],
