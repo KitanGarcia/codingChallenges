@@ -28,25 +28,31 @@
 
 
 
-function battleship(S, T) {
+function battleship(N, S, T) {
   /* Assumptions to make:
    * N is an integer within  the range [1..26]
    * String S contains the descriptions of rectangular ships of area not greater than 4 cells
    * There can be at most one ship located on any map cell (ships do not overlap)
    *
+   * Ships and shots do not go off the map. Codility says to assume all input is valid
    */
 
-  //do preliminary checks
-  //ship goes beyond map
-  //shot goes beyond map
-  //all shots are hits
-  //all ships sunk
-  //all shots miss
+  //map is has no tiles
+  if (N === 0) {
+    console.log("Map has no tiles.");
+    return "0,0";
+  }
   
   //there are no ships
   if (S.length === 0) {
     console.log("No ships in play.");
     return "0,0"
+  }
+
+  //there are no shots fired
+  if (T.length === 0) {
+    console.log("No shots fired.");
+    return "0,0";
   }
   
   let shipCoords = {}; //coord: shipID
@@ -58,10 +64,6 @@ function battleship(S, T) {
   parseShips(shipCoords, shipHits, S); //gets coordinates of ships and populates shipCoords with coord: shipID
   
   let shots = T.split(" ");
-  console.log(shipCoords);
-  console.log(shipHits);
-  console.log(shots);
-
 
   shots.forEach(shot => {
     if (shipCoords[shot] >= 0) {
@@ -101,9 +103,6 @@ function parseShips(shipCoords, shipHits, positions) {
   }
 }
 
-//ROW MUST BE LESS THAN N AND COL MUST BE LESS THAN N IN ALPHABET FORM!!!!!!!!
-
-
 //find all coordinates of a ship
 function getShipCoords(shipTuple, shipCoords) {
   let cells = shipTuple;
@@ -130,7 +129,7 @@ function getShipCoords(shipTuple, shipCoords) {
 
   //ships are in the same row
   if (rowDifference === 0) {
-    for (i = 1; i < additionalCols; i++) {
+    for (i = 1; i <= additionalCols; i++) {
       cells.push(row1 + String.fromCharCode(col1Code + i));
     }
   }
@@ -142,7 +141,7 @@ function getShipCoords(shipTuple, shipCoords) {
     }
   }
 
-  //ships are only 4 cells, it is a square
+  //ships are only 4 cells, so it is a square
   else {
     cells.push(row1 + column2);
     cells.push(row2 + column1);
@@ -158,12 +157,70 @@ function markShip(map, shipID, coords) {
 }
 
 
-let S = "1B 2C,2D 4D";
-let T = "2B 2D 3D 4D 4A";
+let A = 4;
+let B = "1B 2C,2D 4D";
+let C = "2B 2D 3D 4D 4A";
+//1,1
 
-let A1 = "";
-let B1 = "";
 
-let A2 = "1B 2C,2D 4D";
-let B2 = "";
-console.log(battleship(S, T));
+let A2 = 3;
+let B2 = "1A 2B,2C 2C";
+let C2 = "1B";
+//0,1
+
+
+let A3 = 12;
+let B3 = "1A 2A,12A 12A";
+let C3 = "12A";
+//0,1
+
+
+let A4 = 3;
+let B4 = "";
+let C4 = "";
+//0,0
+
+
+let A5 = 4;
+let B5 = "1B 2C,2D 4D";
+let C5 = "";
+//0,0
+
+
+let A6 = 0;
+let B6 = "1B 2C,2D 4D";
+let C6 = "2B 2D 3D 4D 4A";
+//0,0
+
+
+let A7 = 5;
+let B7 = "1A 4A,1D 4D,1B 2C,5B 5E";
+let C7 = "1B 2B 2C 1C 1A 2A 3A 4A 1D 4D 2D 5B 3D 5C 5D 5E";
+//4,0
+
+
+let A8 = 5;
+let B8 = "1A 4A,1D 4D,1B 2C,5B 5E";
+let C8 = "1B 2B 2C 1A 2A 3A 1D 2D 5B 3D 5D 5E";
+//0,12
+
+let A9 = 5;
+let B9 = "1A 4A,1D 4D,1B 2C,5B 5E";
+let C9 = "1B 2B 2C 1C 1A 2A 3A 4A 1D 4D 2D 5B 3D 5C 5D";
+//3,3
+
+let A10 = 6;
+let B10 = "1A 4A,1D 4D,1B 2C,5B 5E";
+let C10 = "5A 6A 3B 3C 4B 4C 6B 6C 6D 6E";
+//0,0
+
+console.log(battleship(A, B, C));
+console.log(battleship(A2, B2, C2));
+console.log(battleship(A3, B3, C3));
+console.log(battleship(A4, B4, C4));
+console.log(battleship(A5, B5, C5));
+console.log(battleship(A6, B6, C6));
+console.log(battleship(A7, B7, C7));
+console.log(battleship(A8, B8, C8));
+console.log(battleship(A9, B9, C9));
+console.log(battleship(A10, B10, C10));
