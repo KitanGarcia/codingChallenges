@@ -1,0 +1,4 @@
+heap
+trees
+graph
+hash table
