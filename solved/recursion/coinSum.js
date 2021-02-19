@@ -220,3 +220,4 @@ console.log(coinSum2([1, 2, 3], 4)); //should output 4
 console.log(coinSum2([1, 2, 5], 5)); //should output 4
 console.log(coinSum2([1, 2, 4], 5)); //should also output 4
 console.log(coinSum2([1, 3, 5, 7], 8)); //should output 6
+console.log(coinSum2([1, 2], 5)); //should output 3

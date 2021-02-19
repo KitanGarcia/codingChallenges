@@ -1,16 +1,10 @@
 /*
- * Given a string str of lowercase alphabetical characters, return the set of all permutations of those characters in upper AND lowercase.
- *
- * Input: "abc"
-*  Output: ["ABC", "ABc", "AbC", "aBC", "Abc", "aBc", "abC", "abc"]
-*
-*  Constraints:
-*  Time Complexity: O(2^N)
-*  Space Complexity: O(2^N)
-*  Ordering does not matter
- */
+  Given a string str of lowercase alphabetical characters, return the set of all permutations of those characters in upper AND lowercase.
 
-/*
+  Input: "abc"
+  Output: ["ABC", "ABc", "AbC", "aBC", "Abc", "aBc", "abC", "abc"]
+
+
   Advanced: Make it work with string with numbers too
 
   Input: "A1d3"
