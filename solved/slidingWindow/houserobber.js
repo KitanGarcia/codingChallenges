@@ -153,6 +153,58 @@ function robHouses(array) {
 }
 
 
+/*
+ * A solution that was used in tech level up
+ *  ans is the best answer so far that gets bigger as we encounter new indices
+ *           i
+ *   input: [2, 7, 9, 3, 1]
+ *     ans: [2]
+ *
+ *
+ *              i
+ *   input: [2, 7, 9, 3, 1]
+ *     ans: [2, 7]
+ *
+ *
+ *                 i
+ *   input: [2, 7, 9, 3, 1]
+ *     ans: [2, 7, 11]
+ *
+ *                    i
+ *   input: [2, 7, 9, 3, 1]
+ *     ans: [2, 7, 11, 11]
+ *
+ *                       i
+ *   input: [2, 7, 9, 3, 1]
+ *     ans: [2, 7, 11, 11, 12]
+ *
+ */
+function robHousesTB(houses) {
+  if (houses.length === 0) {
+    return 0;
+  }
+  else if (nums.length === 1) {
+    return nums[0];
+  }
+  else if (nums.length === 2) {
+    return Math.max(nums[0], nums[1]);
+  }
+
+  let result = [];
+  result[0] = houses[0];
+  result[2] = Math.max(nums[0], nums[1]);
+
+  for (let i = 2; i < houses.length; i++) {
+    let option1 = nums[i] + result[i - 2];
+    let option2 = result[i - 1];
+
+    result[i] = Math.max(option1, option2);
+  }
+
+  return result[result.length - 1];
+}
+
+
 console.log(robHousesRecTopDown([300, 200]));
 console.log(robHousesRecTopDown([100, 200, 100, 500, 200, 300]));
 console.log(robHousesRecTopDown([4, 1, 2, 100]));
