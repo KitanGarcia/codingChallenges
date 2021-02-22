@@ -63,15 +63,32 @@ function subsequences(S, T) {
 }
 
 
+
+/*
+ *                                            ABCDE/ACE
+ *                     A                                                         -
+ *                  BCDE/CE                                                   BCDE/ACE
+ *                                -                                                     -
+ *                             CDE/CE                                                 CDE/ACE
+ *                        C              -                                                    -
+ *                      DE/E           DE/CE                                                 DE/ACE
+ *                          -                 -                                                    -
+ *                         E/E               E/CE                                                 E/ACE
+ *                      E                  /CE                                                     /ACE
+ *                      1                   0                                                       0
+ *       
+*/
 function subsequencesMemo(S, T) {
   let n = S.length;
   let m = T.length;
   let memo = {};
 
   function helper(i, j) {
+    //if we reach the end of the original string and the subsequence, we have found the subsequence in the original
     if (i == n) {
       return 1 ? j == m : 0;
     }
+    //if we reach the end of the subsequence but not the end of the original string
     if (j == m) {
       return 1;
     }
@@ -84,9 +101,11 @@ function subsequencesMemo(S, T) {
     //if not equal to T, skip
     let ans = 0;
     if (S[i] === T[j]) {
+      //skip or keep the character and add to result
       ans += helper(i + 1, j + 1) + helper(i + 1, j);
     }
     else {
+      //skip the character
       ans += helper(i + 1, j);
     }
 
