@@ -119,6 +119,20 @@ function latticePathsMemo(m, n) {
   return memo[m + "_" + n];
 }
 
+function latticePathsDP2(m, n) {
+  let cache = [1];
+
+  let larger = Math.max(m, n);
+  let smaller = Math.min(m, n);
+
+  while (cache.length < larger + 1) {
+    for (let i = 1; i < cache.length; i++) {
+      cache[i] += cache[i - 1];
+    }
+    cache.push(2 * cache[cache.length - 1]);
+  }
+  return cache[smaller];
+}
 
 
 function latticePathsDP(m, n) {
@@ -132,4 +146,7 @@ function latticePathsDP(m, n) {
   }
   return dp[1];
 }
+
+
+
 console.log(latticePathsDP(2, 3));

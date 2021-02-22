@@ -4,7 +4,6 @@ let joinArrays = function(arr1, arr2) {
   let p2 = 0;
   let result = []; //array that we will build up
 
-
   if (!arr1) {
     return arr2;
   }
@@ -35,6 +34,9 @@ let joinArrays = function(arr1, arr2) {
   return result;
 }
 
+
+
+
 let mergeSort = function(input) {
   if (input.length <= 1) {
     return input;
@@ -45,6 +47,9 @@ let mergeSort = function(input) {
 
   return joinArrays(mergeSort(left), mergeSort(right));
 }
+
+
+
 
 let i = 1000;
 let test = [];

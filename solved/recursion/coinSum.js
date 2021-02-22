@@ -43,22 +43,73 @@
 //EXPLANATION IS AT BOTTOM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
+//RECURSIVE SOLUTION
+function coinSum(coins, target) {
+  //remaining is amount left from target
+  function inner(currCoin, remaining) {
 
-function coinSum(coins, total) {
-  let count = 0;
-  function sumCoins(sum, coin) {
-    if (sum === total) {
-      return 1;
-    }
-    else if (sum > total) {
+    //we've exceeded our target
+    if (remaining < 0) {
       return 0;
     }
-    return sumCoins(sum + coin, coins[0]) + sumCoins(sum + coin, coins[1]) + sumCoins(sum + coin, coins[2]);
+
+    //we reach our target
+    if (remaining === 0) {
+      return 1;
+    }
+
+    //we used all the coins
+    if (currCoin >= coins.length) {
+      return 0;
+    }
+
+    //take coin
+    let useCurrent = inner(currCoin, remaining - coins[currCoin]);
+    
+    //look at next coin
+    let next = inner(currCoin + 1, remaining);
+
+    return useCurrent + next;
   }
-  
-  return sumCoins(0, 0);
+  return inner(0, target);
 }
-//need to get rid of duplicates
+
+//MEMOIZED RECURSIVE SOLUTION
+function coinSumMemo(coins, target) {
+  let memo = {};
+
+  //remaining is amount left from target
+  function inner(currCoin, remaining) {
+
+    //we've exceeded our target
+    if (remaining < 0) {
+      return 0;
+    }
+
+    //we reach our target
+    if (remaining === 0) {
+      return 1;
+    }
+
+    //we used all the coins
+    if (currCoin >= coins.length) {
+      return 0;
+    }
+    if (memo.hasOwnProperty(currCoin + "_" + remaining)) {
+      return memo[currCoin + "_" + remaining];
+    }
+
+    //take coin
+    let useCurrent = inner(currCoin, remaining - coins[currCoin]);
+    
+    //look at next coin
+    let next = inner(currCoin + 1, remaining);
+
+    memo[currCoin + "_" + remaining] = useCurrent + next;
+    return memo[currCoin + "_" + remaining];
+  }
+  return inner(0, target);
+}
 
 
 
