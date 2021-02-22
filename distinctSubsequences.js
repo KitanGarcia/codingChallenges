@@ -62,6 +62,42 @@ function subsequences(S, T) {
   return helper(S, 0);
 }
 
+
+function subsequencesMemo(S, T) {
+  let n = S.length;
+  let m = T.length;
+  let memo = {};
+
+  function helper(i, j) {
+    if (i == n) {
+      return 1 ? j == m : 0;
+    }
+    if (j == m) {
+      return 1;
+    }
+
+    if (memo.hasOwnProperty(i + "_" + j)) {
+      return memo[i + "_" + j];
+    }
+
+    //For each char in S, if equal to char in T, either keep it or not
+    //if not equal to T, skip
+    let ans = 0;
+    if (S[i] === T[j]) {
+      ans += helper(i + 1, j + 1) + helper(i + 1, j);
+    }
+    else {
+      ans += helper(i + 1, j);
+    }
+
+    memo[i + "_" + j] = ans;
+    return ans;
+  }
+  let answer = helper(0, 0);
+  console.log(memo);
+  return answer;
+}
+
 console.log(subsequences("ABCDE", "ACE"));
 console.log(subsequences("rabbbit", "rabbit"));
 console.log(subsequences("babgbag", "bag"));
