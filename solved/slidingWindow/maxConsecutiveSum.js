@@ -47,3 +47,33 @@ function maxConsecutiveSum(array) {
 
 let test1 = [6, -1, 3, 5, -10];
 console.log(maxConsecutiveSum(test1));
+
+
+/*
+ *                                         0
+ *                  6                                             0
+ *        5                  -1                       -1                    3
+ *   8        3        2            5          2             5       
+ */
+
+function maxSumRecursive(arr) {
+  let max = -Infinity;
+  function helper(index, sum) {
+    if (index >= arr.length) {
+      return;
+    }
+    if (max < sum) {
+      max = sum;
+    }
+
+    //take or move on
+
+    //take current index
+    let addCurrent = helper(index + 1, sum + arr[index]);
+
+    //move on
+    let moveOn = helper(index + 1, 0);
+  }
+  helper(0, 0);
+  return max;
+}

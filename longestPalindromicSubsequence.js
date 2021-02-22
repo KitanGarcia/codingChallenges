@@ -31,6 +31,8 @@ Longest palindromic subsequence here is "tbtctbt"
  *     i                               i                                 i                             i
  *     vvv                            tvvv                              vvvv                         vtvvv
  */
+
+//Time Complexity: O(2^n)
 function longestPalindromicSubsequence(input) {
   let max = 0;
 
@@ -88,6 +90,8 @@ function isPalindrome(input) {
  *                                                                 vtvvv  1                        vtvvv  1
  *              
  */
+//Time Complexity: O(n^2)
+//Space Complexity: O(n^2)
 function LPSMemo(input) {
   let memo = {};
   function findSubsequence(left, right) {
