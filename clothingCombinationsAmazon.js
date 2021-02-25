@@ -123,10 +123,59 @@ FOR LOOP VERSION
     return sum; 
  
  */
- *
- */
 
+/*
+ *                         2                                                           3
+ *                         4                                                           4
+ *          2
+ *
+ * Take the clothing and move on or move to the next of the same type
+ */
 function findCombinations(jeans, shoes, skirts, tops, budget) {
+  let array = [];
+  array.push(jeans);
+  array.push(shoes);
+  array.push(skirts);
+  array.push(tops);
+  let count = 0;
+
+  function findCombos(clothingType, clothingIndex, remaining) {
+    //if we have selected from each clothing category and have 0 or more money left
+    if (remaining >= 0 && clothingType > array.length - 1) {
+      count++;
+      console.log("SOLUTION. Remaining: " + remaining);
+      console.log("Count: " + count);
+      return;
+    }
+    if (remaining < 0) {
+      return;
+    }
+    if (clothingType >= array.length) {
+      return;
+    }
+    if (clothingIndex >= array[clothingType].length) {
+      return;
+    }
+
+    console.log("====================================================");
+    /*
+    console.log("Clothing type: " + clothingType);
+    console.log("Clothing index: " + clothingIndex);
+    */
+    console.log("Value: " + array[clothingType][clothingIndex]);
+    console.log("Remaining: " + remaining);
+
+    //pick the the clothes and move to the next category, or move onto the next one of the same category
+
+    //pick clothes and move on to next category
+    findCombos(clothingType + 1, 0, remaining - array[clothingType][clothingIndex]);
+
+    //look at clothes of same category
+    findCombos(clothingType, clothingIndex + 1, remaining);
+  }
+
+  findCombos(0, 0, budget);
+  return count;
 }
 
 let jeans = [2, 3];
@@ -134,4 +183,5 @@ let shoes = [4];
 let skirts = [2, 3];
 let tops = [1, 2];
 let budget = 10;
-console.log(findCombination(jeans, shoes, skirts, tops, budget));
+
+console.log(findCombinations(jeans, shoes, skirts, tops, budget));

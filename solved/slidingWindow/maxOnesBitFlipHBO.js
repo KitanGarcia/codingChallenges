@@ -33,6 +33,22 @@ SLIDING WINDOW
  *  L              R                            toggles = 2
  *  L                 R                         toggles = 3  Now, we enter catch up phase since toggles > n. Now we move L up. Current max is 5 - 0 + 1
  *     L              R                         toggles = 2  L moves to a 1 so we decrease toggles
+ *
+ *
+ *
+ *
+ * for n = 2
+ * [0, 1, 1, 1, 0, 1, 0, 1, 0, 0]
+ *  L  R
+ *  L     R
+ *  L        R
+ *  L           R                          5
+ *     L        R
+ *     L           R
+ *     L              R
+ *     L                 R                 7
+ *                 L        R              4
+ *                       L     R           2
  */
 
 function maxOnesBitFlip(array, n) {
