@@ -178,10 +178,63 @@ function findCombinations(jeans, shoes, skirts, tops, budget) {
   return count;
 }
 
+
+
+
+function findCombinationsMemo(jeans, shoes, skirts, tops, budget) {
+  let array = [];
+  array.push(jeans);
+  array.push(shoes);
+  array.push(skirts);
+  array.push(tops);
+  let memo = {};
+
+  function findCombos(clothingType, clothingIndex, remaining) {
+    //if we have selected from each clothing category and have 0 or more money left
+    if (remaining >= 0 && clothingType > array.length - 1) {
+      console.log("SOLUTION. Remaining: " + remaining);
+      return 1;
+    }
+    if (remaining < 0) {
+      return 0;
+    }
+    if (clothingType >= array.length) {
+      return 0;
+    }
+    if (clothingIndex >= array[clothingType].length) {
+      return 0;
+    }
+
+    const key = `${clothingType}_${clothingIndex}_${remaining}`;
+    if (memo.hasOwnProperty(key)) {
+      console.log("Hit Memo at: " + key);
+      console.log(memo[key]);
+      return memo[key];
+    }
+
+    console.log("====================================================");
+    console.log("Value: " + array[clothingType][clothingIndex]);
+    console.log("Remaining: " + remaining);
+    console.log("Clothing type: " + clothingType);
+    console.log("Clothing index: " + clothingIndex);
+
+    //pick the the clothes and move to the next category, or move onto the next one of the same category
+
+    let val = findCombos(clothingType + 1, 0, remaining - array[clothingType][clothingIndex]) + 
+              findCombos(clothingType, clothingIndex + 1, remaining);
+    memo[key] = val;
+    return val;
+  }
+
+  return findCombos(0, 0, budget);
+}
+
+
 let jeans = [2, 3];
 let shoes = [4];
 let skirts = [2, 3];
 let tops = [1, 2];
 let budget = 10;
 
-console.log(findCombinations(jeans, shoes, skirts, tops, budget));
+//console.log(findCombinations(jeans, shoes, skirts, tops, budget));
+console.log(findCombinationsMemo(jeans, shoes, skirts, tops, budget));
