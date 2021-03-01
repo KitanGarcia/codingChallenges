@@ -79,9 +79,47 @@ class Trie {
     return true;
   }
 
+
+  //not sure if this is correct
+  remove(string) {
+    if (string === "") {
+      return;
+    }
+    let current = this.root;
+    let stack = [];
+
+    for (let i = 0; i < string.length; i++) {
+      stack.push(current);
+      current = current.descendants[string[i]];
+
+      if (current === undefined) {
+        return;
+      }
+
+      current.isWord = false;
+      if (Object.keys(current.descendants).length > 0) {
+        console.log("has descendants");
+        console.log(current.descendants);
+        return;
+      }
+
+      let previousLetter;
+
+      while (!current.isWord && stack.length > 0) {
+        previousLetter = current.value;
+        current = stack.pop();
+        delete current.descendants[previousLetter];
+      }
+    }
+  }
+
 }
 
 let trie = new Trie();
 trie.insert("cow");
-
+console.log(trie.startsWith("o"));
+console.log(trie.isWord("co"));
+console.log(trie.isWord("cow"));
+trie.insert("a");
+trie.remove("a");
 console.log(trie.root.descendants);
