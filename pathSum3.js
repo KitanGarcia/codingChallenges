@@ -25,78 +25,103 @@ Return 3. The paths that sum to 8 are:
 1.  5 -> 3
 2.  5 -> 2 -> 1
 3. -3 -> 11
-
 */
 
-//This is in Python
-//NOT A WORKING SOLUTION
-//
-class Solution:
-  def PathSum(self, root: TreeNode, sum: int) -> int:
-    def count_sum(node: TreeNode, running_sum): 
-      nonlocal count
-      if not node:
-        return
-      
-      running_sum += node.val
-      
-      if running_sum - sum in hashmap:
-        count += hashmap[running_sum - sum]
-
-      #add running_sum to hash
-      hash_map[running_sum] += 1
-
-      #left and right recursion
-      count_sum(node.left, running_sum)
-      count_sum(node.right, running_sum)
-
-      #backtrack
-      hashmap[running_sum] -= 1
-    
-    
-    count = 0
-    hashmap = defaultdict(int)
-    count_sum(root, 0)
-
-    return count
-
-
-
-
-
-
-
-
-//C++ ATTEMPT
-class Solution {
-    
-    int count = 0;
-    int target;
-    unordered_map<int,int> prefix_sum;
-    
-    
-    void preorder(TreeNode* node, int curr_sum)
-    {
-        if(node==nullptr) return;
-        
-        curr_sum += node->val;
-        
-        if(prefix_sum.count(curr_sum - target))
-            count += prefix_sum[curr_sum - target];
-        
-        prefix_sum[curr_sum]++;
-        
-        preorder(node->left, curr_sum);
-        preorder(node->right, curr_sum);
-        
-        prefix_sum[curr_sum]--;
+/*
+                                                  10
+                                                 /  \
+                                                5   -3
+                                               / \    \
+                                              3   2   11
+                                             / \   \
+                                            3  -2   1
+ *                                               
+ *  Traverses some parts multiple times since it's a dfs within a dfs
+ *  Time Complexity is between O(nlog(n)) to O(n^2)
+ */
+function pathSum(root, target) {
+  let count = 0;
+  
+  //first dfs to call 2nd dfs
+  function dfs(node, target) {
+    if (!node) {
+      return;
     }
     
-public:
-    int pathSum(TreeNode* root, int sum) {
-        prefix_sum[0] =1;
-        target = sum;
-        preorder(root, 0);
-        return count;
+    test(node, target); //call 2nd dfs
+    dfs(node.left, target);
+    dfs(node.right, target);
+  }
+  
+  //this 2nd dfs will just compare sum with target
+  function test(node, target) {
+    if (!node) {
+      return;
     }
+    
+    if (node.val === target) {
+      count++;
+    }
+    
+    test(node.left, target - node.val);
+    test(node.right, target - node.val);
+  }
+  dfs(root, target);
+  return count;
+}
+
+
+
+//MORE OPTIMIZED SOLUTION
+var pathSum2 = function(root, target) {
+    const freq = { 0: 1 }
+    function dfs (node, currSum) {
+        if (!node) {
+          return 0;
+        }
+      
+        currSum += node.val;
+        const oldSum = currSum - target;
+        let res = freq[oldSum] || 0;
+      
+        freq[currSum] = (freq[currSum] || 0) + 1;
+        res += dfs(node.left, currSum) + dfs(node.right, currSum);
+        freq[currSum]--;
+        return res;
+    }
+    return dfs(root, 0)
+};
+
+//ANOTHER SOLUTION
+var pathSum3 = function(root, target) {
+  let count = 0;
+  
+  function dfs(node, tempSum) {
+    if (!node) {
+      return;
+    }
+    
+    tempSum += node.val;
+    if (tempSum === target) {
+      count++;
+    }
+    
+    dfs(node.left, tempSum);
+    dfs(node.right, tempSum);
+  }
+  
+  
+  let curr = root;
+  let stack = [];
+  
+  while (curr || stack.length > 0) {
+    while (curr) {
+      stack.push(curr);
+      dfs(curr, 0);
+      curr = curr.left;
+    }
+    curr = stack.pop();
+    curr = curr.right;
+  }
+  return count;
 };
