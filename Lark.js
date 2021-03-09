@@ -70,7 +70,7 @@ let input3 = "abc3[cd]xyz"
       let final = substring.slice(0, index);
       console.log("FINAL: " + final);
 
-      result += substring.repeat(multiplier);
+      result += final.repeat(multiplier);
       return substring.repeat(multiplier);
     } 
 
