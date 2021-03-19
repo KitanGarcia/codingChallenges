@@ -12,6 +12,38 @@ Input: s = "abc3[cd]xyz"
 Output: "abccdcdcdxyz"
 */
 
+function decode(input) {
+  function recurse(index, result, substring, multiplier) {
+    if (substring[index] === "]") {
+      //SHOULD PROBABLY JUST ADD FRAGMENT TO RESULT. LET THE REST HANDLE
+      let fragment = substring.slice(0, index);
+      console.log("fragment")
+      console.log(fragment);
+      return result + fragment.repeat(multiplier);
+    }
+    if (index >= substring.length) {
+      return result;
+    }
+    
+    if (substring[index] == "[") {
+      let newMultiplier = parseInt(substring[index - 1]);
+      let newSubstring = substring.slice(index + 1);
+      return recurse(0, result, newSubstring, newMultiplier);
+    }
+
+    else {
+      result += substring[index];
+      return recurse(index + 1, result, substring, multiplier);
+    }
+  }
+  let result = recurse(0, "", input, 1);
+  console.log(result);
+  console.log("FINAL");
+  return recurse(0, "", input, 1);
+}
+
+
+
 /*
                                slice substring from bracket
                                a2[c]]
@@ -42,17 +74,13 @@ Output: "abccdcdcdxyz"
          continue first loop
 */
 //number.isInteger()
+
+/*
 function decode(input) {
   let result = "";
-  /*
-                                            3[a2[c]]
-                                            a2[c]]
-
 
 let input3 = "abc3[cd]xyz"
 
-
-*/
 
   function traverse(substring, multiplier, index) {
     console.log(substring);
@@ -98,6 +126,7 @@ let input3 = "abc3[cd]xyz"
   traverse(input, 1, 0);
   return result;
 }
+*/
 
 /*
                                slice substring from bracket
@@ -118,6 +147,7 @@ let input3 = "abc3[cd]xyz"
                               accaccacc
                                                     
 */
+
 
 
 let input1 = "3[a]2[bc]";

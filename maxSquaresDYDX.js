@@ -3,10 +3,6 @@
 1 1 0
 1 0 1
 
-1 1 1
-1 1 0
-1 0 1
-
 0 0 0
 0 0 0
 0 0 0
@@ -16,6 +12,76 @@
 1 0 1
 */
 
+
+function biggestSquare(input) {
+  let maxSquare = 0;
+  for (let i = 0; i < input.length; i++) {
+    for (let j = 0; j < input[0].length; j++) {
+      if (input[i][j] == 1) {
+        let localMax = findSquare(i, j, input);
+        console.log(localMax);
+        maxSquare = Math.max(localMax, maxSquare);
+      }
+    }
+  }
+  return maxSquare;
+}
+
+function findSquare(row, col, input) {
+  console.log("origin: " + row + ", " + col);
+  let max = 1;
+  let cols = [];
+
+  for (let j = col; j < input[0].length; j++) {
+    if (input[row][j] == 1) {
+      cols.push(1);
+      console.log(cols);
+
+      if (j + row < input.length) {
+        for (let i = row + 1; i < j + row; i++) {
+          if (input[i][j] == 0) {
+            return max;
+          }
+        }
+      }
+    }
+    else {
+      break;
+    }
+    max = j;
+  }
+  return max;
+}
+
+let input1 = [[1, 1, 1], [1, 1, 0], [1, 0, 1]];
+let input2 = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+let input3 = [[0, 1, 1], [1, 1, 0], [1, 0, 1]];
+let input4 = [[1, 1, 1], [1, 1, 1], [1, 1, 1]];
+let input5 = [[0, 0, 1], [0, 0, 0], [0, 0, 0]];
+let input6 = [[0, 1, 1], [0, 0, 0], [0, 0, 0]];
+/*
+    0 1 1
+    1 1 0
+    1 0 1
+
+    1 1 1
+    1 1 1
+    1 1 1
+*/
+
+/*
+console.log(biggestSquare(input1));
+console.log(biggestSquare(input2));
+*/
+console.log(biggestSquare(input3));
+console.log("===============NEXT INPUT===============");
+console.log(biggestSquare(input4));
+/*
+console.log(biggestSquare(input5));
+console.log(biggestSquare(input6));
+*/
+
+
 /*
  * Complete the 'largestArea' function below.
  *
@@ -23,6 +89,7 @@
  * The function accepts 2D_INTEGER_ARRAY samples as parameter.
  */
 
+/*
 function largestArea(samples) {
     // Write your code here
     //edge cases
@@ -69,5 +136,4 @@ function findSquare(row, col, samples) {
   }
   return max;  
 }
-
-function main() {
+*/
