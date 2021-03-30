@@ -18,21 +18,18 @@
 
 function dialerDictionary(numbers) {
   const map = {"1": ["a", "b"], "2": ["c", "d"], "4": ["z", "s"]};
-
   let result = [];
+
   function recurse(string, index) {
     if (string.length >= numbers.length || index === numbers.length) {
       result.push(string);
       return;
     }
 
-
     //choose to pick one and increment index or pick the next and increment index
     for (let i = 0; i < map[numbers[index]].length; i++) {
       recurse(string + map[numbers[index]][i], index + 1);
     }
-
-
   }
 
   recurse("", 0);
