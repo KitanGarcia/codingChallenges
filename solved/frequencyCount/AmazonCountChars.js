@@ -16,27 +16,53 @@
  * so the answer is 5 + 5
  */
 
-function countCharacters(words, chars) {
-  let sum = 0;
-  let set = new Set();
-  let goodWord = true; //word is good unless proven otherwise. If it stays good, add length to sum
+var countCharacters = function(words, chars) {
+    let result = 0;
 
-  for (let i = 0; i < chars.length; i++) {
-    set.add(chars[i]);
-  }
+    let counts = {};
 
-  for (let i = 0; i < words.length; i++) {
-    for (let j = 0; j < words[i].length; j++) {
-      if (!set.has(words[i][j])) {
-        goodWord = false;
+    for (let i = 0; i < chars.length; i++) {
+      if (chars[i] in counts) {
+        counts[chars[i]]++;
+      } else {
+        counts[chars[i]] = 1;
       }
     }
-    if (goodWord) {
-      sum += words[i].length;
+
+    for (let word of words) {
+      //let countsCopy = counts;
+      let countsCopy = deepObjectCopy(counts);
+
+      let flag = true;
+      for (let i = 0; i < word.length; i++) {
+        let char = word[i];
+        if (!(char in countsCopy)) {
+          flag = false;
+          break;
+        }
+        if (countsCopy[char] < 1) {
+          flag = false;
+          break;
+        }
+
+        countsCopy[char]--;
+      }
+
+      if (flag) {
+        result += word.length;
+      }
     }
-    goodWord = true;
+    return result;
+};
+
+function deepObjectCopy(obj) {
+  let copy = {};
+
+  for (let key in obj) {
+    copy[key] = obj[key];
   }
-  return sum;
+
+  return copy;
 }
 
 let words1 = ["cat", "bt", "hat", "tree"];
