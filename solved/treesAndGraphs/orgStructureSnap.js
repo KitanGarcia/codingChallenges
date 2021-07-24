@@ -1,4 +1,10 @@
-// Employee ID, Manager ID, Employee Name
+// test1 and test2 are arrays of arrays. The innermost arrays consist of [employeeId, managerId, employeeName]. Assume all input is valid.
+// Given this data, print out an organizational hierarchy
+// The employee with itself as the manager is the manager of managers and should be printed first
+// Indent each level and print direct reports of a manager before that manager's colleague on the same level is printed with their team
+// Example below...
+
+// // Employee ID, Manager ID, Employee Name
 // 1, 1, Bob
 // 2, 1, Alice
 // 3, 2, Emp3
@@ -29,10 +35,24 @@ Alice: [employee 3]
 after we build the list out
 */
 
-
-let test1 = [[1, 1, 'bob'], [2, 1, 'Alice'], [3, 2, 'Emp3'], [4, 3, 'Emp4'], [5, 4, 'Emp5'], [6, 3, 'Emp6'], [7, 1, 'Emp7']]
-let test2 = [[4, 4, 'bob'], [2, 3, 'Alice'], [3, 4, 'Emp3'], [6, 3, 'Emp4'], [5, 4, 'Emp5'], [1, 3, 'Emp6'], [7, 5, 'Emp7']]
-
+let test1 = [
+  [1, 1, "bob"],
+  [2, 1, "Alice"],
+  [3, 2, "Emp3"],
+  [4, 3, "Emp4"],
+  [5, 4, "Emp5"],
+  [6, 3, "Emp6"],
+  [7, 1, "Emp7"],
+];
+let test2 = [
+  [4, 4, "bob"],
+  [2, 3, "Alice"],
+  [3, 4, "Emp3"],
+  [6, 3, "Emp4"],
+  [5, 4, "Emp5"],
+  [1, 3, "Emp6"],
+  [7, 5, "Emp7"],
+];
 
 function organize(matrix) {
   //check that it's not empty
@@ -40,9 +60,9 @@ function organize(matrix) {
     return;
   }
 
-  //check that it's a nonempty 2D array 
+  //check that it's a nonempty 2D array
   if (!Array.isArray(matrix[0]) || matrix[0].length === 0) {
-    return
+    return;
   }
 
   let adjList = {}; //graph containing manager: [employees]
@@ -50,7 +70,6 @@ function organize(matrix) {
   let start = 0; //starting node of dfs
 
   for (let i = 0; i < matrix.length; i++) {
-
     //find 1st 2 elements of each nested array and put them in our adjacency list
     let empID = matrix[i][0];
     let managerID = matrix[i][1];
@@ -74,19 +93,16 @@ function organize(matrix) {
       adjList[managerID].push(empID);
     }
   }
-   
+
   //start at the employee ID who has itself as the manager
   dfs(adjList, idToName, start);
 }
-
-
 
 function dfs(graph, idToName, start) {
   let visited = new Set();
   let height = 0;
 
   let mapping = idToName;
-
 
   function traverse(current, height) {
     if (visited.has(current)) {
@@ -110,7 +126,6 @@ function dfs(graph, idToName, start) {
   }
   traverse(start, height);
 }
-
 
 organize(test1);
 console.log("---------------------------");
