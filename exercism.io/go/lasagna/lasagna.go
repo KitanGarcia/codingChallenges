@@ -1,19 +1,34 @@
 package lasagna
 
-// TODO: define the 'OvenTime' constant
-const OvenTime = 40
-
-// RemainingOvenTime returns the remaining minutes based on the `actual` minutes already in the oven.
-func RemainingOvenTime(actualMinutesInOven int) int {
-	return OvenTime - actualMinutesInOven
+func PreparationTime(layers []string, averageTime int) int {
+    if averageTime == 0 {
+        return len(layers) * 2
+    }
+	return len(layers) * averageTime
 }
 
-// PreparationTime calculates the time needed to prepare the lasagna based on the amount of layers.
-func PreparationTime(numberOfLayers int) int {
-	return numberOfLayers * 2
+func Quantities(layers []string) (int, float64) {
+    noodles := 0
+    var sauce float64
+    sauce = 0
+    for i := 0; i < len(layers); i++ {
+        if layers[i] == "noodles" {
+            noodles += 50
+        } else if layers[i] == "sauce" {
+          sauce += .2
+        }
+    }
+	return noodles, sauce
 }
 
-// ElapsedTime calculates the total time needed to create and bake a lasagna.
-func ElapsedTime(numberOfLayers, actualMinutesInOven int) int {
-	return PreparationTime(numberOfLayers) + actualMinutesInOven
+func AddSecretIngredient(friendsList []string, myList []string) []string {
+    return append(myList, friendsList[len(friendsList) - 1])
+}
+
+func ScaleRecipe(amounts []float64, numPortions int) []float64 {
+    scaledAmounts := make([]float64, len(amounts))
+    for i := range scaledAmounts {
+        scaledAmounts[i] = amounts[i] * float64(numPortions) / 2
+    }
+	return scaledAmounts
 }
