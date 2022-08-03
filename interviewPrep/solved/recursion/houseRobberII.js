@@ -22,6 +22,27 @@ Input: nums = [1,2,3]
 Output: 3
  */
 
+var robDP = function (nums) {
+  if (nums.length <= 3) {
+    return Math.max(...nums);
+  }
+
+  const dp1 = [nums[0]]; // Robbing the 1st house
+  const dp2 = [0, nums[1]]; // Robbing the 2nd house
+
+  // Robbing 1st house
+  for (let i = 1; i < nums.length - 1; i++) {
+    dp1[i] = Math.max(nums[i] + (dp1[i - 2] || 0), dp1[i - 1]);
+  }
+
+  // Robbing 2nd house
+  for (let i = 2; i < nums.length; i++) {
+    dp2[i] = Math.max(nums[i] + dp2[i - 2], dp2[i - 1]);
+  }
+
+  return Math.max(dp1.pop(), dp2.pop());
+};
+
 var rob = function (nums) {
   // get max of maxes
   let globalMax = 0;
@@ -85,3 +106,9 @@ console.log(rob([1])); // should be 1
 console.log(rob([2, 3, 2])); // should be 3
 console.log(rob([1, 2, 3, 1])); // should be 4
 console.log(rob([1, 2, 3])); // should be 3
+
+console.log(robDP([1, 2, 3, 4, 5, 1, 2, 3, 4, 5])); // should be 16
+console.log(robDP([1])); // should be 1
+console.log(robDP([2, 3, 2])); // should be 3
+console.log(robDP([1, 2, 3, 1])); // should be 4
+console.log(robDP([1, 2, 3])); // should be 3
