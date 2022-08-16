@@ -1,0 +1,61 @@
+Design a RESTful API for a simple Calendar that has Events that will allow us to perform Calendar operations for those Events.
+
+1) Get events for a calendar
+2) Create an event for a calendar
+3) Get an event
+4) Update an event
+5) Delete an event
+
+Each of these APIs should define:
+  - The HTTP Method
+  - The URL (and any path or query parameters if applicable)
+  - The request body (if applicable)
+  - The response body (if applicable)
+  - The expected HTTP status code(s) for a response
+---------------------------------------------------------------------------
+
+This simple design assumes no authentication or security.  
+
+Any mention of events refer to objects adhering to the below model
+Event: {
+  id: String,
+  userId: String,
+  startDate: Date,
+  endDate: Date,
+  description: String
+}
+
+1) Get events for a calendar
+  a) HTTP Method: GET
+  b) URL: www.restfulcalendar.com/events
+  c) Request Body: N/A
+  d) Response Body: [event1, event2, ..., eventn] --> meaning an array of all events
+  e) Status Codes: 200 - OK, 400 - bad data sent, 500 - internal server error, 503 - server unavailable
+
+2) Create an event for a calendar
+  a) HTTP Method: POST
+  b) URL: www.restfulcalendar.com/events
+  c) Request Body: { userId: String, startDate: Date, endDate: Date, description: String}
+  d) Response Body: { newlyCreatedEvent }
+  e) Status Codes: 201 - event created, 400 - bad data sent, 500 - internal server error, 503 - server unavailable
+
+3) Get an event
+  a) HTTP Method: GET
+  b) URL: www.restfulcalendar.com/events/{event_id}
+  c) Request Body: N/A
+  d) Response Body: { eventFoundById }
+  e) Status Codes: 200 - OK, 400 - bad data sent, 404 - event not found by ID, 500 - internal server error, 503 - server unavailable
+
+4) Update an event
+  a) HTTP Method: PATCH
+  b) URL: www.restfulcalendar.com/events/{event_id}
+  c) Request Body: { startDate: Date, endDate: Date, description: String }
+  d) Response Body: { updatedEvent }
+  e) Status Codes: 200 - OK, 400 - bad data sent, 404 - event not found by ID, 500 - internal server error, 503 - server unavailable
+
+5) Delete an event
+  a) HTTP Method: DELETE
+  b) URL: www.restfulcalendar.com/events/{event_id}
+  c) Request Body: N/A
+  d) Response Body: {}
+  e) Status Codes: 200 - OK, 404 - event not found by ID, 500 - internal server error, 503 - server unavailable
