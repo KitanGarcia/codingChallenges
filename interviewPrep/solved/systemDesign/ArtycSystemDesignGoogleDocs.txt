@@ -1,0 +1,93 @@
+In this part of the assessment, you will be thinking about the way you would design a Google Docs application from an architectural and decision-making perspective. There are no right answers here! You can either add your answers here or upload your own document to this folder.
+
+
+The Build
+What languages, tools, frameworks, hosting, and other considerations (e.g. user authentication) would you think about when designing the web app? How does everything work together? What features do you imagine needing?
+
+
+How would you deal with two people editing the same part of the document at the same time?
+How would you handle offline docs? What happens if the document has changed when the user has made edits and comes back online?
+How do you handle bad packets of data from users and make sure the appropriate edits are still saved on the server?
+How would you manage document history and versioning?
+
+
+
+Languages and Frameworks:
+React/Typescript
+Draft.js (https://draftjs.org/) - A rich text editor framework for React used by Facebook and others. It includes an Editor component, which gives us nice functionalities such as text alignment, colors, font size, spellcheck, autocomplete, block styling, handlers, and so on. It also has an EditorState object which includes current text content state, selection state, the decorated representation of the contents, undo/redo stacks, and the most recent type of change made to the contents. Any change made to the document updates EditorState.
+MongoDB
+Express
+Material UI - Provide pretty buttons for manipulating the editor (alignment, size, bold, italic, etc.)
+Socket.io - Using sockets will allow us to have multiple users viewing the same document and being able to collaborate in live time.
+
+Schemas:
+User: {
+  id: String,
+  username: String,
+  password: String,
+  email: String,
+  documentsAuthored: {},
+  documentsAsCollaborator: {}
+}
+
+In this design, a User will have id, username, password, and email fields which will be stored as strings after sign up. They will also have documentsAuthored and documentsAsCollaborator which will be arrays of Documents, defined below. Every time a User create a Document, that Document's ID will be added to the documentsAuthored object. Likewise, any time a specific user is added as a contributor to someone else's Document and successfully accesses it (by entering the password described below), that Document's ID will be added to the documentsAsCollaborator object. In this way, we can look up a User's Document by ID in O(1) time.
+
+Document: {
+  id: String,
+  password: String,
+  title: String,
+  contents: String,
+  author: User,
+  collaborators: {},
+  history: Array,
+}
+
+Documents will have an ID used for identification purposes. They will also have a password, which would be required to access the document. For example, an author could share the document, by providing a link (containing the ID), and its password, after which the collaborator would need to enter the password correctly to gain access to the document. Documents will also have a title element as well as a contents string which includes all contents and metadata of the document. Next, they will have an author who created the document, and an object of collaborators (of type User) who have permissions to access it.
+
+Storing and Retrieving Content
+As Draft.js specifies, data must be converted to and from the immutable object given by EditorState. To store content, we first need to use the convertToRaw() function to convert the content to a raw JS object. Then, JSON.stringify() to convert it to a string and store it in our database. To retrieve the contents, we'd need to use the convertFromRaw() function along with JSON.parse() to convert the string in our database into the object representing our content. We can set up a useEffect() to check if our Document has content. If it does, we convert the data and render it in our Editor. If not, it's a new Document that hasn't yet been saved, so we start from scratch.
+
+History
+Additionally, a document will have a history array, with each element being a 3 element array: [title, contents, timestamp], with title and contents being the equivalent of their respective fields in the Document schema. Upon saving the document, we can create a new [title, contents, timestamp] trio, push it to the end of the history array, and write to the database. In a History menu, we can then list out each version previously saved, along with its timestamp, in descending order, with most recent being on top.
+
+Saving Documents
+We can choose to either have a "Save" button, which would update the Documents' contents field as well as its history and write to the database. Or, we could have it autosave. When autosaving, we wouldn't want to make too many pointless writes to the database, so let's say we could have it save every 2 seconds if and only if a new change has been made. For the sake of picking an option and since Google Docs uses it (and it's probably preferred by users too), let's go with autosave!
+
+Sign Up
+www.artycdocs.com/signup
+To sign up, we'd present the user a form. Here, they'd enter their username, email, and password. To make things simple for this design, usernames must be unique. I include username here to allow other users to search for each other when adding collaborators to their Documents. Passwords will be forced to be "strong" before sign up is allowed. On a successful sign up, POST the data to the above URL. On the backend, we hash the password (and salt it), assign the User an id, and store the new User in our database.
+After sign up, we route the user to www.artycdocs.com, the homepage where they can view and navigate to their Documents, add collaborators, view their profile, etc. We also generate an access token (JWT) and send it to the client.
+
+Staying Signed In:
+At this point, we saved an access token to the user's browser. In every request to the server, this access token will be included so that users don't need to log in every time they go to our page. When the access token expires, the user will need to log in again.
+
+Log In
+www.artycdocs.com/login
+This page will have a form allowing the user to enter their email and password. When entered successfully and submitted (via a POST request), a new access token will be generated and stored clientside. Users will then be redirected to www.artycdocs.com, the homepage
+
+Inviting Users to Collaborate:
+In the Document Editor page or on the homepage where the documents are listed, there will be a button to add collaborators. This will open a modal where with an input box where collaborators can be searched by username. It will provide suggestions as the user types possible usernames (think Google search). We can use a trie for autocompletion to provide the suggestions. When the user finds the potential collaborator by username, they can select the user as a collaborator. Artycdocs will then send an email to that user for them to opt in as a collaborator. Once they have done so, the Document will be updated to reflect this new User as a collaborator. The collaborator's documentsAsCollaborator filed will also be updated in the database to include the id of the Document. 
+
+Simultaneous Editing
+We can use web sockets via Socket.io to allow communication between users on the same document. After connecting to the document, users will be able to send data to the server (in this case, updates to the document). The socket will also be able to receive event-driven responses and broadcast them to the users collaborating on the document. In this way, when one user makes a change and the Document is saved to the database, the socket can listen for that update and pull the newly updated data for the rest of the users to render clientside. Using sockets, all users can not only make changes to the Document, but always have the most up to date version.
+
+Editing/Viewing/Permissions
+
+Chat
+
+
+
+
+URLS/Endpoints
+www.artycdocs.com/signup - POST to sign up. Redirects to www.artycdocs.com/
+
+www.artycdocs.com/login - POST to log in www.artycdocs.com/
+
+www.artycdocs.com/documents - GET to retrieve list of all Documents associated with a user (this includes both authored and collaborating)
+                            - POST to create a Document
+
+www.artycdocs.com/documents/{document_id} - GET to retrieve a document identified by document_id. Used in editor page to pull contents and other data pertaining to the Document
+                                          - POST to save or update the Document being edited
+
+www.artycdocs.com/documents/{document_id}/collaborators - GET to retrieve all collaborators of a Document
+                                                        - POST to add a new collaborator to the Document
