@@ -11,6 +11,53 @@ output: 5
 SLIDING WINDOW
 */
 
+/*
+count
+ncount
+    0   1   1   1   0   0    0   1   0   0
+   LR                                       0: count++ ncount++
+        LR                                  found new 1: move Lcount++
+        L   R                               found 1: count++
+        L       R                           found 1: count++
+        L           R                       found 0: count++, ncount++, right++
+                       LR                   found 0: ncount = 0; count = 0
+*/
+
+function maxOnesBitFlipBest(array, n) {
+  let max = 0;
+  let left = 0;
+  let right = 0;
+  let count = 0;
+  let nCount = 0;
+
+  while (left < array.length) {
+    // Count 1
+    if (array[right] === 1) {
+      count++;
+    }
+
+    // Count 0 if we have N and increment nCount
+    else if (array[right] === 0 && nCount < n) {
+      nCount++;
+      count++;
+    }
+
+    // 0 and n exhausted or end of list
+    else if (
+      (count > 0 && array[right] === 0 && nCount >= n) ||
+      right >= array.length - 1
+    ) {
+      if (max < count) {
+        max = count;
+      }
+      count = 0;
+      nCount = 0;
+    }
+    left = right;
+    right++;
+  }
+  return max;
+}
 
 /*
  * Hunting Phase
@@ -79,8 +126,6 @@ let input9 = [0, 1, 1, 1, 0, 1, 0, 1, 0, 0];
 console.log(maxOnesBitFlip(input1, 2));
 console.log(maxOnesBitFlip(input9, 2));
 
-
-
 /*
 Given an array of 0s and 1s, find the maximum number of 1s in a row
 
@@ -99,7 +144,7 @@ function maxConsecutiveOnes(array) {
     if (array[i] === 1) {
       count++;
     }
-    if (array[i] === 0 || i >= array.length - 1 ) {
+    if (array[i] === 0 || i >= array.length - 1) {
       if (max < count) {
         max = count;
       }
@@ -126,6 +171,3 @@ console.log(maxConsecutiveOnes(input6));
 console.log(maxConsecutiveOnes(input7));
 console.log(maxConsecutiveOnes(input8));
 */
-
-
-
