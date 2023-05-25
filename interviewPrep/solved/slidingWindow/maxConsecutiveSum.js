@@ -8,7 +8,45 @@ Example:
   Input = [6, -1, 3, 5, -10]
   Output = 13 (6 + -1 + 3 + 5)
 
+/*
+  6   -1   3   5   -10
+ LR
+ L     R                        Store 6 as max
+ L         R                    Store 8 as max
+ L             R                Store 13 as max
+ L                   R          R end: Move up L, move back R
+      LR                        Store -1 as sum
+      L    R                    Store 2 as sum
+      L        R                Store 7 as sum
+      L              R          R end: Move up L, move back R
+           LR                   Store 3 as sum
 
+ */
+
+const maxConsecutiveSumEasier = (array) => {
+  let max = -Infinity;
+  let sum = 0;
+  let left = 0;
+  let right = 0;
+
+  while (left < array.length) {
+    sum += array[right];
+    right++;
+
+    if (max < sum) {
+      max = sum;
+    }
+
+    if (right >= array.length) {
+      left++;
+      right = left;
+      sum = 0;
+    }
+  }
+  return max;
+};
+
+/*
      l represents local max
      u represents ultimate max
      6   -1   3   5   -10
@@ -48,12 +86,11 @@ function maxConsecutiveSum(array) {
 let test1 = [6, -1, 3, 5, -10];
 console.log(maxConsecutiveSum(test1));
 
-
 /*
  *                                         0
  *                  6                                             0
  *        5                  -1                       -1                    3
- *   8        3        2            5          2             5       
+ *   8        3        2            5          2             5
  */
 
 function maxSumRecursive(arr) {
