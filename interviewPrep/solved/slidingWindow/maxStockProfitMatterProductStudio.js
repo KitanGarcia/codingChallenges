@@ -28,6 +28,32 @@
 # 11 is the maximum profit you can make by buying day 2 and selling day 3
 */
 
+/*
+    6    0    -1    10    4
+    L    R                     profit = -6
+         L     R               profit = -1
+               L    R          profit = 11, max = 11
+               L          R    profit = 5
+ */
+// WHY DOES THIS WORK!?
+const maxProfitFaster = (prices) => {
+  let left = 0; // Buy
+  let right = 1; // Sell
+  let max = 0;
+
+  while (right < prices.length) {
+    let profit = prices[right] - prices[left];
+    if (profit > 0) {
+      max = Math.max(max, profit);
+    } else {
+      left = right;
+    }
+    right++;
+  }
+
+  return max;
+};
+
 const findHighestProfit = (prices) => {
   if (prices.length === 0 || prices.length === 1) {
     return 0;
@@ -66,3 +92,7 @@ let prices3 = [6, 5, 4, 3, 2];
 console.log(findHighestProfit(prices1)); // 11
 console.log(findHighestProfit(prices2)); // 11
 console.log(findHighestProfit(prices3)); // 0 since they don't need to trade
+
+console.log(maxProfitFaster(prices1)); // 11
+console.log(maxProfitFaster(prices2)); // 11
+console.log(maxProfitFaster(prices3)); // 0 since they don't need to trade
