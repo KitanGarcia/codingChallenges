@@ -7,6 +7,46 @@ Output: integer (max consecutive sum)
 Example:
   Input = [6, -1, 3, 5, -10]
   Output = 13 (6 + -1 + 3 + 5)
+*/
+
+/*
+ -2   1   -3   4   1
+ L    R                      -1; found positive
+      LR                      1
+      L    R                  -2
+      L        R              4: if current > sum && sum < 0, move left to current
+               L   R          5          
+
+*/
+const maxSubArrayEasyToUnderstand = function (nums) {
+  if (nums.length === 0) {
+    return 0;
+  }
+
+  if (nums.length === 1) {
+    return nums[0];
+  }
+
+  let max = nums[0];
+  let sum = nums[0];
+  let left = 0;
+  let right = 1;
+
+  while (right < nums.length) {
+    current = nums[right];
+
+    // Current is larger than the sum and the sum is neative
+    if (current > sum && sum < 0) {
+      left = right;
+      sum = nums[left];
+    } else {
+      sum = sum + current;
+    }
+    max = Math.max(max, sum);
+    right++;
+  }
+  return max;
+};
 
 /*
   6   -1   3   5   -10
