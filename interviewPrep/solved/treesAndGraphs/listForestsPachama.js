@@ -12,7 +12,6 @@
  *  [[1, 3], [2, 3], [2, 2], [3, 2], [1, 5], [2, 5], [1, 6], [2, 6]]
  */
 
-
 function listForests(array) {
   let map = array;
   let result = [];
@@ -21,7 +20,6 @@ function listForests(array) {
   //iterate across whole map
   for (let i = 0; i < map.length; i++) {
     for (let j = 0; j < map[0].length; j++) {
-
       //if the value is a 1 that has not been visited, perform bfs or dfs
       if (map[i][j] == 1 && !visited.has(i + "_" + j)) {
         result = result.concat(dfs(map, visited, i, j));
@@ -62,6 +60,24 @@ function bfs(map, visited, i, j) {
 
 function getNeighbors(map, i, j) {
   let neighbors = [];
+  let deltas = [
+    [-1, 0],
+    [0, 1],
+    [1, 0],
+    [0, -1],
+  ];
+
+  for (let delta of deltas) {
+    if (map[i + delta[0]] && map[i + delta[0]][j + delta[1]]) {
+      neighbors.push([i, j]);
+    }
+  }
+  return neighbors;
+}
+
+/*
+function getNeighbors(map, i, j) {
+  let neighbors = [];
   let tuple = [];
 
   if (i < map.length - 1) {
@@ -83,7 +99,7 @@ function getNeighbors(map, i, j) {
   }
   return neighbors;
 }
-
+*/
 
 function dfs(map, visited, i, j) {
   let result = [];
@@ -114,7 +130,6 @@ function dfs(map, visited, i, j) {
   return result;
 }
 
-
 function dfsRecursive(map, visited, i, j) {
   let result = [];
 
@@ -137,32 +152,37 @@ function dfsRecursive(map, visited, i, j) {
   return result;
 }
 
+let input = [
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0],
+  [0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1],
+  [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+];
 
+let input2 = [
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0],
+  [0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1],
+  [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+];
 
-let input =  [[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-              [ 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0],
-              [ 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1],
-              [ 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]];
+let input3 = [
+  [1, 1, 0, 0, 0, 0, 0, 1, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 1],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [1, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 1, 0, 0, 0, 0, 0, 1, 1],
+];
 
-let input2 =  [[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-              [ 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0],
-              [ 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1],
-              [ 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-              [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
+let input4 = [[1, 1, 0, 1, 1, 0, 0, 1, 1]];
 
-let input3 =  [[ 1, 1, 0, 0, 0, 0, 0, 1, 1],
-              [ 1, 0, 0, 0, 0, 0, 0, 0, 1],
-              [ 0, 0, 0, 0, 0, 0, 0, 0, 0],
-              [ 1, 0, 0, 0, 0, 0, 0, 0, 1],
-              [ 1, 1, 0, 0, 0, 0, 0, 1, 1]];
-
-let input4 =  [[ 1, 1, 0, 1, 1, 0, 0, 1, 1]];
-
-
-let input5 =  [[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-              [ 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0],
-              [ 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1],
-              [ 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]];
+let input5 = [
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0],
+  [0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1],
+  [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+];
 
 //console.log(listForests(input));
 //console.log(listForests(input2));
