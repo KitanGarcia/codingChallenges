@@ -18,6 +18,34 @@ Output: false
 Explanation: You will always arrive at index 3 no matter what. Its maximum jump length is 0, which makes it impossible to reach the last index.
  */
 
+/*
+  2  3  1  1  4    max = 0
+  i                Math.max(max, 2 + 0) = 2
+     i             max = Math.max(max, 3 + 1) = 4; 4 >= nums.length - 1 --> true;
+
+
+  3  2  1  0  4    max = 0
+  i                max = Math.max(max, 3 + 0) = 3
+     i             max = Math.max(max, 2 + 1) = 3
+        i          max = Math.max(max, 1 + 2) = 3
+           i       max = Math.max(max, 0 + 3) = 3; max = i and nums[i] = 0 --> false
+*/
+var canJumpFaster = function (nums) {
+  let max = 0;
+
+  for (let i = 0; i < nums.length; i++) {
+    max = Math.max(max, nums[i] + i);
+    if (max >= nums.length - 1) {
+      return true;
+    }
+    if (max === i && nums[i] === 0) {
+      return false;
+    }
+  }
+
+  return false;
+};
+
 var canJump = function (nums) {
   let memo = {};
 
