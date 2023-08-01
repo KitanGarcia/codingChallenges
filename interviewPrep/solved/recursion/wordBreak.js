@@ -23,6 +23,55 @@
   Output: false
  */
 
+/*
+    l   t   c   o     [lt, co]
+    s   e             l
+    s       e         lt set has lt; queue.push(2); add 0 to visited
+    s           e     ltc; set does not have; inc e
+    s               e ltco; set does not have; inc e
+
+    Next, look at t (1)
+    l   t   c   o     [lt, co]
+            s   e     c
+            s       e co; set has co && end == s.length --> return true
+ */
+var wordBreakDFS = function (s, wordDict) {
+  if (wordDict === null || wordDict.length === 0) {
+    return false;
+  }
+  const set = new Set(wordDict);
+
+  const visited = new Set();
+  let queue = [0]; // queue tracks index. Initialize to index 0
+
+  while (queue.length) {
+    // Get index of next letter
+    const start = queue.shift();
+
+    // We have not traversed the index
+    if (!visited.has(start)) {
+      // Go from next index to end of string
+      for (let end = start + 1; end <= s.length; end++) {
+        if (set.has(s.slice(start, end))) {
+          if (end === s.length) {
+            return true;
+          }
+
+          // Add next index to queue
+          console.log(end);
+          queue.push(end);
+        }
+      }
+
+      // Mark index we just explored as visited
+      visited.add(start);
+    }
+  }
+
+  return false;
+};
+
+// Brute force
 var wordBreak = function (s, wordDict) {
   let dict = new Set(wordDict);
   let result = false;
