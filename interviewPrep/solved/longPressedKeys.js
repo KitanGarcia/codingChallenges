@@ -31,8 +31,6 @@
   ssaaedd
 */
 
-
-
 /*        i
  * name:  saeed
  *
@@ -58,26 +56,44 @@
  *                                 F3,5    F2,5
  *
  * REFLECTION: Use smaller test cases for recursion and completely map out the recursion
-*/
+ */
+
+var isLongPressedName3 = function (name, typed) {
+  let nPointer = 0;
+  let tPointer = 0;
+  let prevN = "";
+
+  while (nPointer < name.length) {
+    if (name[nPointer] === typed[tPointer]) {
+      prevN = name[nPointer];
+      tPointer++;
+      nPointer++;
+    } else if (typed[tPointer] === prevN) {
+      tPointer++;
+    } else {
+      return false;
+    }
+  }
+
+  return true;
+};
 
 //This gives an exponential runtime worst case
-var isLongPressedName = function(name, typed) {
-  if (typed.length < name.length)
-    return false;
+var isLongPressedName = function (name, typed) {
+  if (typed.length < name.length) return false;
 
-  let i = 0, j = 0;
+  let i = 0,
+    j = 0;
   while (i < name.length || j < typed.length) {
     if (name[i] !== typed[j]) {
       i--;
-      if (name[i] !== typed[j])
-        return false;
+      if (name[i] !== typed[j]) return false;
     }
     i++;
     j++;
   }
   return true;
-}
-
+};
 
 //ANOTHER SOLUTION
 function isLongPressedName2(name, typed) {
@@ -92,12 +108,16 @@ function isLongPressedName2(name, typed) {
 
   function tryIt(i, j) {
     //base case
-    let key = i + '_' + j;
+    let key = i + "_" + j;
     if (key in cache) {
       return cache[key];
     }
-    
-    if (i === name.length - 1 && j === typed.length - 1 && name[i] === typed[j]) {
+
+    if (
+      i === name.length - 1 &&
+      j === typed.length - 1 &&
+      name[i] === typed[j]
+    ) {
       return true;
     }
 
@@ -116,7 +136,6 @@ function isLongPressedName2(name, typed) {
     //recursive case
     //something is wrong here by looking at above tree
     cache[key] = tryIt(i + 1, j + 1) || tryIt(i, j + 1);
-
   }
 
   return tryIt(0, 0);
@@ -124,5 +143,3 @@ function isLongPressedName2(name, typed) {
 
 console.log(isLongPressedName("saeed", "ssaaedd"));
 console.log(isLongPressedName("alex", "aaaleeexx"));
-
-
