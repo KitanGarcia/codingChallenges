@@ -42,6 +42,37 @@ const isValid = (str) => {
   return !stack.length;
 };
 
+// Another solution - easier to picture, but less elegant
+const isValid2 = (brackets) => {
+  let stack = [];
+
+  for (let i = 0; i < brackets.length; i++) {
+    if (brackets[i] === "(" || brackets[i] === "[" || brackets[i] === "{") {
+      stack.push(brackets[i]);
+    } else {
+      const last = stack[stack.length - 1];
+      if (brackets[i] === ")") {
+        if (last !== "(") {
+          return false;
+        }
+      }
+      if (brackets[i] === "]") {
+        if (last !== "[") {
+          return false;
+        }
+      }
+      if (brackets[i] === "}") {
+        if (last !== "{") {
+          return false;
+        }
+      }
+      stack.pop();
+    }
+  }
+
+  return stack.length === 0 ? true : false;
+};
+
 console.log(isValid("()"));
 console.log(isValid("()[]{}"));
 console.log(isValid("(]"));
