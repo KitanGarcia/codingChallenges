@@ -17,22 +17,39 @@ N is an integer within the range [1..2,147,483,647].
 
 */
 
-function maxBinaryGap(N) {
-    N = N.toString(2);
-    let max = 0;
+// Easier solution - not sliding window
+const maxBinaryGap2 = (number) => {
+  // Get binary represenation of number as a string
+  const stringed = number.toString(2);
+  let count = 0;
+  let max = 0;
 
-    let start = 0;
-    let end = 0;
-    while (end !== N.length) {
-        if (N[end] == 1) {
-            max = Math.max(end - start, max);
-            start = end;
-
-        }
-        end++;
+  for (let i = 0; i < stringed.length; i++) {
+    if (stringed[i] == 0) {
+      count++;
+      max = Math.max(count, max);
+    } else {
+      count = 0;
     }
+  }
+  return max;
+};
 
-    return max ? max - 1: max;
+function maxBinaryGap(N) {
+  N = N.toString(2);
+  let max = 0;
+
+  let start = 0;
+  let end = 0;
+  while (end !== N.length) {
+    if (N[end] == 1) {
+      max = Math.max(end - start, max);
+      start = end;
+    }
+    end++;
+  }
+
+  return max ? max - 1 : max;
 }
 
 console.log(maxBinaryGap(1041));
