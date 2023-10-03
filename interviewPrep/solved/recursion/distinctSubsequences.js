@@ -35,7 +35,7 @@ Auxiliary Space Complexity: O(N)
  *                            BCDE                                                      ABCDE
  *          CDE                        BCDE                                ACDE                        ABCDE
  *    DE           CDE           BDE          BCDE                   ADE           ACDE        ABDE           ABCDE
- *  E    DE       
+ *  E    DE
  *
  * 2 choices: Delete char or move to the next one. Keep track of index so we know where to delete
  *
@@ -49,10 +49,12 @@ function subsequences(S, T) {
       return 0;
     }
 
-
     //delete char or move to next one and delete at incremented index
     //delete char
-    let deleteChar = helper(substring.slice(0, index) + substring.slice(index + 1), index);
+    let deleteChar = helper(
+      substring.slice(0, index) + substring.slice(index + 1),
+      index
+    );
 
     //look at next index
     let lookNext = helper(substring, index + 1);
@@ -61,8 +63,6 @@ function subsequences(S, T) {
   }
   return helper(S, 0);
 }
-
-
 
 /*
  *                                            ABCDE/ACE
@@ -76,8 +76,8 @@ function subsequences(S, T) {
  *                         E/E               E/CE                                                 E/ACE
  *                      E                  /CE                                                     /ACE
  *                      1                   0                                                       0
- *       
-*/
+ *
+ */
 function subsequencesMemo(S, T) {
   let n = S.length;
   let m = T.length;
@@ -103,8 +103,7 @@ function subsequencesMemo(S, T) {
     if (S[i] === T[j]) {
       //skip or keep the character and add to result
       ans += helper(i + 1, j + 1) + helper(i + 1, j);
-    }
-    else {
+    } else {
       //skip the character
       ans += helper(i + 1, j);
     }
@@ -117,10 +116,42 @@ function subsequencesMemo(S, T) {
   return answer;
 }
 
+const pureRecursionBruteForce = (
+  s,
+  t,
+  index = 0,
+  substring = "",
+  memo = {}
+) => {
+  let key = index + "_" + substring;
+  if (memo[key]) {
+    return memo[key];
+  }
+  if (substring === t) {
+    return 1;
+  }
+
+  if (index > s.length) {
+    return 0;
+  }
+
+  if (substring.length > t.length) {
+    return 0;
+  }
+
+  // Take letter
+  let take = func(s, t, index + 1, substring + s[index]);
+
+  // Move to next letter
+  let move = func(s, t, index + 1, substring);
+
+  memo[key] = take + move;
+  return memo[key];
+};
+
 console.log(subsequences("ABCDE", "ACE"));
 console.log(subsequences("rabbbit", "rabbit"));
 console.log(subsequences("babgbag", "bag"));
-
 
 console.log(subsequencesMemo("ABCDE", "ACE"));
 console.log(subsequencesMemo("rabbbit", "rabbit"));
